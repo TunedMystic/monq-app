@@ -1,0 +1,2 @@
+~ Integrate django-debug-toolbar.
+~ Design and write Snippet model.
