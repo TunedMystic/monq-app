@@ -52,3 +52,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Web App
+bin/
+include/
+lib/
+*.sqlite3
