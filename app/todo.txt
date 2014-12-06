@@ -1,2 +1,2 @@
-~ Integrate django-debug-toolbar.
-~ Design and write Snippet model.
+~ Create SnippetExtras model.
+~ Integrate json-field into SnippetExtras.
