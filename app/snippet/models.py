@@ -28,6 +28,10 @@ class Snippet(models.Model):
   def preview(self):
     return "%s" %(self.content[:150])
   
+  @staticmethod
+  def rawSize(x):
+    return sys.getsizeof(x)
+  
   @property
   def size(self):
     def formatSize(amt):
@@ -48,7 +52,7 @@ class Snippet(models.Model):
         return amt
       return fmt(amt) + " bytes"
     
-    return formatSize(sys.getsizeof(self.content))
+    return formatSize(Snippet.rawSize(self.content))
   
   def __unicode__(self):
     return "%s" %(self.title[:24] + ": [" + self.language + "]")
