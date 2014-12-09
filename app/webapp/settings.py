@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     "taggit",
     # Site-specific apps.
     "nil",
-    "userprofile",
+    "userextension",
     "snippet",
 )
 
