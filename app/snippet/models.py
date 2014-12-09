@@ -19,7 +19,7 @@ class Snippet(models.Model):
   author = models.ForeignKey(settings.AUTH_USER_MODEL, blank = False)
   url_code = models.CharField(max_length = 80, blank = False)
   tags = TaggableManager(blank = True)
-  _date_added = models.DateTimeField(auto_now_add = True)
+  _date_added = models.DateTimeField(auto_now_add = True, verbose_name = "Date Added")
   
   @property
   def date_added(self):
@@ -32,7 +32,7 @@ class Snippet(models.Model):
   @staticmethod
   def rawSize(x):
     return sys.getsizeof(x)
-  
+
   @property
   def size(self):
     def formatSize(amt):
@@ -60,13 +60,28 @@ class Snippet(models.Model):
 
 
 class SnippetExtras(models.Model):
+  """
+  This model defines extra (but not primary) information for a Snippet.
+  Each Snippet model will have an associated SnippetExtras model. 
+  """
   snippet = models.OneToOneField(Snippet, unique = True)
   hits = models.PositiveIntegerField(blank = False, default = 0)
   likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank = True)
+  
+  def __unicode__(self):
+    return "%s" %("Extras to : '" + self.snippet.title[:24] + "..' [" + self.snippet.language + "]")
+  
+  # Display number of likes.
+  def getLikes(self):
+    return "%d" %(self.likes.count())
+  getLikes.short_description = "Likes"
 
 
 # Create a new SnippetExtras model for each Snippet model.
 def createSnippetExtras(sender, **kwargs):
+  """
+  Create a new SnippetExtras model each time a new Snippet is created and saved.
+  """
   if kwargs.get("created") and kwargs["created"]:
     if kwargs.get("instance") and kwargs["instance"]:
       obj, created = SnippetExtras.objects.get_or_create(snippet = kwargs["instance"])
