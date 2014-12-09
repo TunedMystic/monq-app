@@ -1,2 +1,1 @@
-~ Create SnippetExtras model.
 ~ Integrate json-field into SnippetExtras.
