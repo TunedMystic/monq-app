@@ -27,4 +27,4 @@ def createUserProfile(sender, **kwargs):
       obj, created = UserProfile.objects.get_or_create(user = kwargs["instance"], accountType = acc)
 
 # Connect the signal.
-models.signal.post_save.connect(createUserProfile, sender = settings.AUTH_USER_MODEL)
+models.signals.post_save.connect(createUserProfile, sender = settings.AUTH_USER_MODEL)
