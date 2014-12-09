@@ -4,6 +4,7 @@ from django.conf import settings
 from taggit.managers import TaggableManager
 from definitions import editormodes, privacy
 
+
 class Snippet(models.Model):
   """
   This model describes the data of a 'Snippet'.
@@ -56,4 +57,19 @@ class Snippet(models.Model):
   
   def __unicode__(self):
     return "%s" %(self.title[:24] + ": [" + self.language + "]")
-  
+
+
+class SnippetExtras(models.Model):
+  snippet = models.OneToOneField(Snippet, unique = True)
+  hits = models.PositiveIntegerField(blank = False, default = 0)
+  likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank = True)
+
+
+# Create a new SnippetExtras model for each Snippet model.
+def createSnippetExtras(sender, **kwargs):
+  if kwargs.get("created") and kwargs["created"]:
+    if kwargs.get("instance") and kwargs["instance"]:
+      obj, created = SnippetExtras.objects.get_or_create(snippet = kwargs["instance"])
+    
+# Connect the signal.
+models.signals.post_save.connect(createSnippetExtras, sender = Snippet)
