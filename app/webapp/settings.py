@@ -37,7 +37,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "taggit",
+    # Site-specific apps.
     "nil",
+    "userprofile",
     "snippet",
 )
 
