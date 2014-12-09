@@ -84,6 +84,6 @@ def createSnippetExtras(sender, **kwargs):
   if kwargs.get("created") and kwargs["created"]:
     if kwargs.get("instance") and kwargs["instance"]:
       obj, created = SnippetExtras.objects.get_or_create(snippet = kwargs["instance"])
-    
+
 # Connect the signal.
 models.signals.post_save.connect(createSnippetExtras, sender = Snippet)

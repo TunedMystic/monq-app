@@ -21,6 +21,7 @@ class SnippetExtrasInline(admin.StackedInline):
   SnippetExtras info to be displayed along with a single Snippet instance.
   """
   model = SnippetExtras
+  can_delete = False
   # Editing a single instance.
   fields = ("hits", "getLikes")
   readonly_fields = ("getLikes",)
