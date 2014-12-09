@@ -17,3 +17,14 @@ class UserProfile(models.Model):
     return "%s's profile" %(self.user.username)
 
 
+def createUserProfile(sender, **kwargs):
+  """
+  Each time a new User is created, a corresponding UserProfile object is created.
+  """
+  if kwargs.get("created") and kwargs["created"]:
+    if kwargs.get("instance") and kwargs["instance"]:
+      acc = "Normal"
+      obj, created = UserProfile.objects.get_or_create(user = kwargs["instance"], accountType = acc)
+
+# Connect the signal.
+models.signal.post_save.connect(createUserProfile, sender = settings.AUTH_USER_MODEL)

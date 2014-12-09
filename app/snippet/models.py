@@ -77,7 +77,6 @@ class SnippetExtras(models.Model):
   getLikes.short_description = "Likes"
 
 
-# Create a new SnippetExtras model for each Snippet model.
 def createSnippetExtras(sender, **kwargs):
   """
   Create a new SnippetExtras model each time a new Snippet is created and saved.
