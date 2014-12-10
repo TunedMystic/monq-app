@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from snippet.definitions import editormodes
+from django.contrib.auth.signals import user_logged_in
 
 class UserProfile(models.Model):
   """
@@ -23,8 +24,21 @@ def createUserProfile(sender, **kwargs):
   """
   if kwargs.get("created") and kwargs["created"]:
     if kwargs.get("instance") and kwargs["instance"]:
+      print "creating user profile for", kwargs["instance"].username
       acc = "Normal"
       obj, created = UserProfile.objects.get_or_create(user = kwargs["instance"], accountType = acc)
 
 # Connect the signal.
 models.signals.post_save.connect(createUserProfile, sender = settings.AUTH_USER_MODEL)
+
+
+def collectLoginInfo(sender, **kwargs):
+  """
+  Each time a User logs in, collect data about the login.
+  Collect time of login, and ip address.
+  """
+  if kwargs.get("user"):
+    print "User", kwargs["user"].username ," has just logged in :)"
+
+# Connect the signal.
+user_logged_in.connect(collectLoginInfo)

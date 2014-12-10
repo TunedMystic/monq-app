@@ -11,15 +11,23 @@ def endall():
   for obj in get_user_model().objects.all():
     obj.delete()
 
+def makeUser(n, e, p):
+  try:
+    usr = get_user_model().objects.get(username = n)
+    return usr
+  except get_user_model().DoesNotExist:
+    return get_user_model().objects.create_user(username = n, email = e, password = p)
+  
 
 def main():
 
   # Make Users.
-  Harry, harry = get_user_model().objects.get_or_create(username = "harry", email = "harry@gmail.com", password = "harry")
-  Emily, emily = get_user_model().objects.get_or_create(username = "emily", email = "emily@gmail.com", password = "emily")
-  Ramin, ramin = get_user_model().objects.get_or_create(username = "ramin", email = "ramin@gmail.com", password = "ramin")
-  Tyler, tyler = get_user_model().objects.get_or_create(username = "tyler", email = "tyler@gmail.com", password = "tyler")
-  Bella, bella = get_user_model().objects.get_or_create(username = "bella", email = "bella@gmail.com", password = "bella")
+  Harry = makeUser("harry", "harry@gmail.com", "harry")
+  Emily = makeUser("emily", "emily@gmail.com", "emily")
+  Ramin = makeUser("ramin", "ramin@gmail.com", "ramin")
+  Tyler = makeUser("tyler", "tyler@gmail.com", "tyler")
+  Bella = makeUser("bella", "bella@gmail.com", "bella")
+  Drogo = get_user_model().objects.create_superuser(username = "drogo", email = "drogo@gmail.com", password = "drogo")
   
   # Make some Snippets!
   s1 = Snippet.objects.create(author = Harry, language = "javascript", content = "function hello() {\nconsole.log('hello');\n}", url_code = "abcde")
