@@ -13,7 +13,7 @@ class Snippet(models.Model):
   
   title = models.CharField(max_length = 50, default = "Untitled", blank = True)
   content = models.TextField(blank = False)
-  language = models.CharField(max_length = 20, choices = editormodes.Modes, default = editormodes._TEXT, blank= False)
+  language = models.CharField(max_length = 20, default = editormodes._TEXT, blank= False)
   visibility = models.CharField(max_length = 20, choices = privacy.Privacy, default = privacy._PUBLIC, blank = False)
   password = models.CharField(max_length = 40, blank = True)
   author = models.ForeignKey(settings.AUTH_USER_MODEL, blank = False)
@@ -67,7 +67,7 @@ class SnippetExtras(models.Model):
   snippet = models.OneToOneField(Snippet, unique = True)
   hits = models.PositiveIntegerField(blank = False, default = 0)
   likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank = True)
-  editorTheme = models.CharField(max_length = 20, choices = editorthemes.Themes, default = editormodes._AMBIANCE, blank = False)
+  editorTheme = models.CharField(max_length = 20, default = editorthemes._AMBIANCE, blank = False)
   
   def __unicode__(self):
     return "%s" %("Extras to : '" + self.snippet.title[:24] + "..' [" + self.snippet.language + "]")

@@ -15,11 +15,11 @@ def endall():
 def main():
 
   # Make Users.
-  Harry = get_user_model().objects.create(username = "harry", email = "harry@gmail.com", password = "harry")
-  Emily = get_user_model().objects.create(username = "emily", email = "emily@gmail.com", password = "emily")
-  Ramin = get_user_model().objects.create(username = "ramin", email = "ramin@gmail.com", password = "ramin")
-  Tyler = get_user_model().objects.create(username = "tyler", email = "tyler@gmail.com", password = "tyler")
-  Bella = get_user_model().objects.create(username = "bella", email = "bella@gmail.com", password = "bella")
+  Harry = get_user_model().objects.get_or_create(username = "harry", email = "harry@gmail.com", password = "harry")
+  Emily = get_user_model().objects.get_or_create(username = "emily", email = "emily@gmail.com", password = "emily")
+  Ramin = get_user_model().objects.get_or_create(username = "ramin", email = "ramin@gmail.com", password = "ramin")
+  Tyler = get_user_model().objects.get_or_create(username = "tyler", email = "tyler@gmail.com", password = "tyler")
+  Bella = get_user_model().objects.get_or_create(username = "bella", email = "bella@gmail.com", password = "bella")
   
   # Make some Snippets!
   s1 = Snippet.objects.create(author = Harry, language = "javascript", content = "function hello() {\nconsole.log('hello');\n}", url_code = "abcde")
