@@ -2,7 +2,7 @@ import sys
 from django.db import models
 from django.conf import settings
 from taggit.managers import TaggableManager
-from definitions import editormodes, privacy
+from definitions import editorthemes, editormodes, privacy
 
 
 class Snippet(models.Model):
@@ -62,11 +62,12 @@ class Snippet(models.Model):
 class SnippetExtras(models.Model):
   """
   This model defines extra (but not primary) information for a Snippet.
-  Each Snippet model will have an associated SnippetExtras model. 
+  Each Snippet model will have an associated SnippetExtras model.
   """
   snippet = models.OneToOneField(Snippet, unique = True)
   hits = models.PositiveIntegerField(blank = False, default = 0)
   likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank = True)
+  editorTheme = models.CharField(max_length = 20, choices = editorthemes.Themes, default = editormodes._AMBIANCE, blank = False)
   
   def __unicode__(self):
     return "%s" %("Extras to : '" + self.snippet.title[:24] + "..' [" + self.snippet.language + "]")
