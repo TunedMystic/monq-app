@@ -17,7 +17,7 @@ class Snippet(models.Model):
   visibility = models.CharField(max_length = 20, choices = privacy.Privacy, default = privacy._PUBLIC, blank = False)
   password = models.CharField(max_length = 40, blank = True)
   author = models.ForeignKey(settings.AUTH_USER_MODEL, blank = False)
-  url_code = models.CharField(max_length = 80, blank = False)
+  url_code = models.CharField(max_length = 80, unique = True, blank = False)
   tags = TaggableManager(blank = True)
   _date_added = models.DateTimeField(auto_now_add = True, verbose_name = "Date Added")
   

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.contrib.auth import get_user_model, authenticate, login
 from django.http import Http404, HttpResponseBadRequest
+from ipware.ip import get_ip, get_real_ip
 
 class LoginTest(View):
   template_name = "userextension/testlogin.html"
@@ -10,14 +11,15 @@ class LoginTest(View):
     return ["post"]
   
   def get(self, request):
-    
+    #import pdb; pdb.set_trace();
+    print "hello"
     harry = authenticate(username = "harry", password = "harry")
     if harry is not None:
-      if harry.is_active:
+      if not request.user == harry:
         login(request, harry)
-        return render(request, self.template_name, {"msg": "Hello " + str(harry.username)})
+        return render(request, self.template_name, {"msg": "Hello " + harry.username + " !"})
       else:
-        return HttpResponseBadRequest("The user does not exist.")
+        return render(request, self.template_name, {"msg": "How's it going " + harry.username + " ?"})
     else:
-      raise Http404
+      return HttpResponseBadRequest("The user does not exist.")
     
