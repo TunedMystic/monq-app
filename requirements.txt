@@ -1,6 +1,10 @@
 Django==1.7.1
+arrow==0.4.4
 django-debug-toolbar==1.2.2
+django-ipware==0.1.0
 django-taggit==0.12.2
 jsonfield==1.0.0
+python-dateutil==2.3
+six==1.8.0
 sqlparse==0.1.14
 wsgiref==0.1.2
