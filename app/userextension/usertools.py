@@ -18,6 +18,13 @@ def getIp(request):
       IP_NOT_FOUND
 
 
+def getIsoDate():
+  """
+  Returns the current date in iso string format.
+  """
+  return arrow.now().datetime.isoformat()
+
+
 def isoToDate(isostring):
   """
   Accepts an isoformat-ted string and
@@ -32,18 +39,3 @@ def formatDate(d):
   a string representation.
   """
   return d.strftime("%A %b %d, %Y - %I:%M:%S %p")
-
-
-def collectUserData(r):
-  """
-  This function collects information about the logged-in user.
-  Returns a list containing a dictionary.
-  The dictionary contains two keys: "date", and "ip".
-  "date" corresponds to an isoformat-ted string of the current date(time).
-  "ip" corresponds to the user's ip address.
-  """
-  data = {
-    "date": arrow.now().datetime.isoformat(),
-    "ip": getIp(r)
-  }
-  return [data]

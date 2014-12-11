@@ -17,9 +17,9 @@ class LoginTest(View):
     if harry is not None:
       if not request.user == harry:
         login(request, harry)
-        return render(request, self.template_name, {"msg": "Hello " + harry.username + " !"})
+        return render(request, self.template_name, {"msg": "Hello " + harry.username + " !", "u": request.user})
       else:
-        return render(request, self.template_name, {"msg": "How's it going " + harry.username + " ?"})
+        return render(request, self.template_name, {"msg": "How's it going " + harry.username + " ?", "u": request.user})
     else:
       return HttpResponseBadRequest("The user does not exist.")
     

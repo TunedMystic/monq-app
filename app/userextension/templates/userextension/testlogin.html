@@ -13,6 +13,13 @@
 	<h3>This is a test login page:</h3>
   
   <h1>{{ msg }}</h1>
+  
+  {% for dataChunk in user.userprofile.loginDetails.data %}
+    <p style="border: 1px solid black;">
+      {{ dataChunk }}
+      <br>
+    </p>
+  {% endfor %}
 
 </body>
 </html>
