@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>New Snippet</title>
+	<!--[if IE]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+
+<body id="home">
+  
+  <form id="snippetForm" novalidate="novalidate">
+    {% csrf_token %}
+    <input type="text" id="snippet-title" name="title" value="{{ copyTitle }}">
+    
+    <textarea id="snippet-content" name="content">{{ copyContent }}</textarea>
+    
+    <select name="visibility">
+      <option value="public" selected>Public</option>
+      <option value="private" selected>Private</option>
+    </select>
+    
+    <input type="password" id="snippet-password" name="password">
+    
+    <input type="text" id="snippet-tags" name="tags">
+    
+    <input type="submit" value="Create Snippet">
+  </form>
+  
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+  <script type="text/javascript">
+    
+    $(document).ready(function() {
+      // Do something here.
+    });
+    
+  </script>
+</body>
+</html>

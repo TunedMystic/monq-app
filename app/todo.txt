@@ -1,2 +1,1 @@
-~ Integrate json-field into UserProfile.
-~ Integrate django-ipaware into user_logged_in signals.
+~ Work on Snippet ModelForm and Views.

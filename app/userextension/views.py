@@ -11,12 +11,12 @@ class LoginTest(View):
     return ["post"]
   
   def get(self, request):
-    #import pdb; pdb.set_trace();
     print "hello"
     harry = authenticate(username = "harry", password = "harry")
     if harry is not None:
       if not request.user == harry:
         login(request, harry)
+        import pdb; pdb.set_trace();
         return render(request, self.template_name, {"msg": "Hello " + harry.username + " !", "u": request.user})
       else:
         return render(request, self.template_name, {"msg": "How's it going " + harry.username + " ?", "u": request.user})
