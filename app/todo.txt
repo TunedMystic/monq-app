@@ -1,1 +1,3 @@
 ~ Work on Snippet ModelForm and Views.
+~ Work on Snippet searching.
+~ Implement advanced querying with django.db.models.Q

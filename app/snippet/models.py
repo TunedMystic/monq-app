@@ -27,7 +27,8 @@ class Snippet(models.Model):
   # The tags associated with the Snippet.
   tags = TaggableManager(blank = True)
   # The date the Snippet was posted.
-  _date_added = models.DateTimeField(auto_now_add = True, verbose_name = "Date Added")
+  #_date_added = models.DateTimeField(auto_now_add = True, verbose_name = "Date Added")
+  _date_added = models.DateTimeField(verbose_name = "Date Added")
   
   @property
   def date_added(self):
