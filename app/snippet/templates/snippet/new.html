@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>New Snippet</title>
+	<!--[if IE]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+
+<body id="home">
+  
+  <form id="snippetForm" novalidate="novalidate">
+    {% csrf_token %}
+    <input type="text" id="snippet-title" name="title" value="{{ copyTitle }}">
+    
+    <textarea id="snippet-content" name="content">{{ copyContent }}</textarea>
+    
+    <select id="snippet-language" name="language">
+      <option value="python">Python</option>
+      <option value="ruby">Ruby</option>
+      <option value="javascript">Javascript</option>
+      <option value="text" selected>Text</option>
+    </select>
+    
+    <select id="snippet-visibility" name="visibility">
+      <option value="public" selected>Public</option>
+      <option value="private">Private</option>
+    </select>
+    
+    <input type="password" id="snippet-password" name="password">
+    
+    <input type="text" id="snippet-tags" name="tags">
+    
+    <input type="submit" value="Create Snippet">
+  </form>
+  
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+  <script type="text/javascript">
+    
+    function postNewSnippet() {
+      $.ajax({
+        url: "/newSnippet/",
+        headers: {
+          "X-CSRFToken": $.cookie("csrftoken")
+        },
+        type: "POST",
+        dataType: "json",
+        data: {
+          "title": $("#snippet-title").val(),
+          "content": $("#snippet-content").val(),
+          "language": $("#snippet-language").val(),
+          "visibility": $("#snippet-visibility").val(),
+          "password": $("#snippet-password").val(),
+          "tags": $("#snippet-tags").val()
+        },
+        success: function(data, status, jqXHR) {
+          console.log("Success!\n\n");
+          
+          window.sdata = data;
+          console.log(window.sdata);
+        },
+        error: function(data, status, jqXHR) {
+          console.log("Error!\n\n");
+          
+          window.sdata = data;
+          console.log(window.sdata);
+        }
+      });
+    }
+    
+    function putData() {
+      $("#snippet-title").val("Hello"),
+      $("#snippet-content").val("This is test post!"),
+      $("#snippet-language").val("python"),
+      $("#snippet-visibility").val("public"),
+      $("#snippet-password").val(),
+      $("#snippet-tags").val("hello, omg, misc")
+    }
+    
+    function s() {
+      console.log(window.sdata.responseText);
+    }
+    
+    $(document).ready(function() {
+      putData();
+      
+      $("#snippetForm").submit(function(e) {
+        e.preventDefault();
+        postNewSnippet();
+      });
+      
+    });
+    
+  </script>
+</body>
+</html>

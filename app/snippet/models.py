@@ -10,15 +10,23 @@ class Snippet(models.Model):
   This model describes the data of a 'Snippet'.
   A Snippet can hold any supported code/text.
   """
-  
+  # Title of the Snippet.
   title = models.CharField(max_length = 50, default = "Untitled", blank = True)
+  # The content of the Snippet.
   content = models.TextField(blank = False)
+  # The (programming) language the Snippet is written in.
   language = models.CharField(max_length = 20, default = editormodes._TEXT, blank= False)
+  # Will the Snippet be public or private?
   visibility = models.CharField(max_length = 20, choices = privacy.Privacy, default = privacy._PUBLIC, blank = False)
+  # The password for the (private) Snippet.
   password = models.CharField(max_length = 40, blank = True)
-  author = models.ForeignKey(settings.AUTH_USER_MODEL, blank = False)
+  # The User that wrote the snippet. (Can be an Anonyous user).
+  author = models.ForeignKey(settings.AUTH_USER_MODEL, blank = True, null = True)
+  # Uniquely generated hash for the Snippet.
   url_code = models.CharField(max_length = 80, unique = True, blank = False)
+  # The tags associated with the Snippet.
   tags = TaggableManager(blank = True)
+  # The date the Snippet was posted.
   _date_added = models.DateTimeField(auto_now_add = True, verbose_name = "Date Added")
   
   @property
@@ -64,9 +72,13 @@ class SnippetExtras(models.Model):
   This model defines extra (but not primary) information for a Snippet.
   Each Snippet model will have an associated SnippetExtras model.
   """
+  # The Foriegn Key back to the Snippet.
   snippet = models.OneToOneField(Snippet, unique = True)
+  # The number of times the Snippet has been viewed.
   hits = models.PositiveIntegerField(blank = False, default = 0)
+  # The number of likes the Snippet has.
   likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank = True)
+  # The editor's theme for this Snippet.
   editorTheme = models.CharField(max_length = 20, default = editorthemes._AMBIANCE, blank = False)
   
   def __unicode__(self):

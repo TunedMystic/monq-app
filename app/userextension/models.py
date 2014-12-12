@@ -12,12 +12,17 @@ class UserProfile(models.Model):
   Additional User information that will link to a User account.
   Each User account will have it's own unique User profile.
   """
+  # Foreign key back to the User.
   user = models.OneToOneField(settings.AUTH_USER_MODEL, unique = True)
+  # User's website.
   websiteUrl = models.URLField(max_length = 80, blank = True)
+  # Which social account id the User associated with? (Twitter, Facebook, Googleplus)
   accountType = models.CharField(max_length = 20, default = accounttypes._LOCAL, blank = False)
+  # The (programming) language that the editor will be configured with on startup.
   defaultSnippetLanguage = models.CharField(max_length = 20, default = editormodes._TEXT, blank = False)
   MAX_DATA_AMT = 25
   DEFAULT_LOGIN_DETAIL_DATA = {"data":[]}
+  # Collection of login data for a User. (NOTE: Will collect 'date' and 'ip' of login).
   loginDetails = JSONField(default = DEFAULT_LOGIN_DETAIL_DATA)
   """
   Schema for loginDetails:

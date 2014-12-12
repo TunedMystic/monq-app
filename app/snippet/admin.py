@@ -35,8 +35,9 @@ class SnippetAdmin(admin.ModelAdmin):
   fieldsets = [
     ("Snippet Info", {"fields": ["title", "language", "content"]}),
     ("Privacy", {"fields": ["visibility", "password"]}),
-    ("General", {"fields": ["author", "url_code"]})
+    ("General", {"fields": ["author", "url_code", "tags"]})
   ]
+  readonly_fields = ("password",)
   list_display = ("title", "author", "language", "_date_added", "visibility")
   # Enable filtering.
   list_filter = ("_date_added",)
