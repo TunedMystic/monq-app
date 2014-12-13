@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>New Snippet</title>
+	<title>Search Snippets</title>
 	<!--[if IE]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -12,13 +12,15 @@
   
   <div>
    <form action="{% url 'snippet:searchSnippet' %}" method="POST">
-    {% csrf_token %}
+     {% csrf_token %}
     <input type="text" name="searchQ">
     <input type="submit" value="Search Snippets">
    </form>
     
    <br>
   </div>
+  
+  <h2>Search Results:</h2>
   
   {% for snippet in object_list %}
     <div style="border: 1px solid black;">
@@ -29,13 +31,13 @@
   
   {% if is_paginated %}
     {% if page_obj.has_previous %}
-      <a href="{% url 'snippet:allSnippet' pg=page_obj.previous_page_number %}">Previous</a>
+      <a href="{% url 'snippet:searchSnippet' pg=page_obj.previous_page_number %}">Previous</a>
     {% endif %}
     <span>
       Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
     </span>
     {% if page_obj.has_next %}
-      <a href="{% url 'snippet:allSnippet' pg=page_obj.next_page_number %}">Next</a>
+      <a href="{% url 'snippet:searchSnippet' pg=page_obj.next_page_number %}">Next</a>
     {% endif %}
   {% endif %}
   
