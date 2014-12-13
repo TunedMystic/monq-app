@@ -22,7 +22,7 @@ def makeUser(n, e, p):
 
 def makeSnippet(author = None, title = None, language = None, visibility = None, url_code = None, content = None, date = None, tags = None):
     s = Snippet.objects.create(author = author, title = title, language = language, visibility = visibility, \
-                url_code = url_code, content = content, _date_added = date)
+                url_code = url_code, content = content, date_added_raw = date)
     for t in tags:
       s.tags.add(t)
     s.save()

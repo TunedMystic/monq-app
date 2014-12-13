@@ -38,9 +38,9 @@ class SnippetAdmin(admin.ModelAdmin):
     ("General", {"fields": ["author", "url_code", "tags"]})
   ]
   readonly_fields = ("password",)
-  list_display = ("title", "author", "language", "_date_added", "visibility")
+  list_display = ("title", "author", "language", "date_added_raw", "visibility")
   # Enable filtering.
-  list_filter = ("_date_added",)
+  list_filter = ("date_added_raw",)
   # Results per page.
   list_per_page = 30
   # Enabling searching.

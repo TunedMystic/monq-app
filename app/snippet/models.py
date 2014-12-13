@@ -28,11 +28,11 @@ class Snippet(models.Model):
   tags = TaggableManager(blank = True)
   # The date the Snippet was posted.
   #_date_added = models.DateTimeField(auto_now_add = True, verbose_name = "Date Added")
-  _date_added = models.DateTimeField(verbose_name = "Date Added")
+  date_added_raw = models.DateTimeField(verbose_name = "Date Added")
   
   @property
   def date_added(self):
-    return self._date_added.strftime("%A %b %d, %Y - %I:%M:%S %p")
+    return self.date_added_raw.strftime("%A %b %d, %Y - %I:%M:%S %p")
   
   @property
   def preview(self):

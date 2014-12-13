@@ -4,10 +4,23 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedire
 from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, DetailView, ListView, TemplateView
 from django.views.generic.edit import FormMixin, ProcessFormView
-from django.db.models import F
+from django.db.models import F, Q
 from .models import Snippet, SnippetExtras
 from .forms import SnippetForm
 
+
+def getFilterTerms(query):
+  """
+  Returns a Q object to be used for Snippet model filtering.
+  """
+  q = Q()
+  # Seach by title.
+  q.add(Q(title__icontains=query), Q.OR)
+  # Search by language.
+  q.add(Q(language=query), Q.OR)
+  # Search by tags.
+  q.add(Q(tags__name__in=query.split(" ")), Q.OR)
+  return q
 
 class qSession(object):
   """
@@ -33,6 +46,10 @@ class SnippetCreateView(qSession, CreateView):
     Handles POST requests, instantiating a form instance with the passed
     POST variables and then checked for validity.
     """
+    if request.is_ajax():
+      print "\nThis request is AJAX\n"
+    else:
+      print "\nThis request is Not AJAX\n"
     form_class = self.get_form_class()
     form = self.get_form(form_class)
     # Give the form information about the User.
@@ -87,7 +104,7 @@ class SnippetListView(qSession, ListView):
     """
     Return the list of items for this view.
     """
-    return self.model.objects.all().order_by("-_date_added")
+    return self.model.objects.all().order_by("-date_added_raw")
 
 
 class SnippetSearchFormView(qSession, TemplateView):
@@ -136,5 +153,6 @@ class SnippetSearchView(ListView, ProcessFormView):
     if not searchQ:
       return None
     
-    results = self.model.objects.filter(title__icontains=searchQ).distinct()
+    q = getFilterTerms(searchQ)
+    results = Snippet.objects.filter(q).distinct()
     return results

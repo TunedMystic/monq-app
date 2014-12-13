@@ -13,7 +13,7 @@ class SnippetForm(forms.ModelForm):
   class Meta:
     model = Snippet
     #fields = ["title", "content", "language", "visibility", "password", "tags" ]
-    exclude = ["author", "_date_added", "url_code"]
+    exclude = ["author", "date_added_raw", "url_code"]
   
   def clean_content(self, *args, **kwargs):
     """
@@ -77,6 +77,8 @@ class SnippetForm(forms.ModelForm):
     ##
     ## NOTE: Must replace this functionality!
     snippet.url_code = str(uuid.uuid4())[0:6]
+    from django.utils import timezone
+    snippet.date_added_raw = timezone.localtime(timezone.now())
     ##
     snippet.save()
     return snippet

@@ -12,7 +12,8 @@
   
   <h2>Title: {{ object.title }}</h2>
   <p>Language: {{ object.language }}</p>
-  <h4>Posted by: {{ object.author.username }} on {{ object.date_added }}</h4>
+  <!--h4>Posted by: {-{ object.author.username }-} on {-{ object.date_added }-}</h4-->
+  <h4>Posted by: {{ object.author.username }} on {{ object.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</h4>
   <div>{{ object.content|escape }}</div>
   <p>Hits: {{ object.snippetextras.hits }}</p>
   <p>Likes: {{ object.snippetextras.getLikes }}</p>
