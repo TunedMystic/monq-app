@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
-from django.views.generic import CreateView, DetailView, ListView, TemplateView
+from django.views.generic import CreateView, DetailView, ListView, TemplateView, View
 from django.views.generic.edit import FormMixin, ProcessFormView
 from django.db.models import F, Q
 from .models import Snippet, SnippetExtras
@@ -72,11 +72,47 @@ class SnippetCreateView(qSession, CreateView):
     return HttpResponseBadRequest(json.dumps(form.errors), content_type = "application/json")
 
 
+class SnippetFavoriteView(View):
+  """
+  A View for when a User 'favorites' a Snippet.
+  """
+  
+  def _allowed_methods(self):
+    return ["post"]
+  
+  def post(self, request, *args, **kwargs):
+    # Check if the request was made with ajax.
+    if request.is_ajax():
+      # Check if a user is logged in.
+      if request.user and not request.user.is_anonymous():
+        # Get snippet based on POST data.
+        try:
+          s = Snippet.objects.get(url_code = request.POST.get("snippetUrl", ""))
+          s.snippetextras.likes.add(request.user)
+          s.save()
+          return HttpResponse( \
+                 json.dumps({"msg": "Successfully favorited the Snippet."}), \
+                 content_type="application/json")
+        except Snippet.DoesNotExist:
+          return HttpResponseBadRequest( \
+                 json.dumps({"msg": "We could not find that Snippet."}), \
+                 content_type = "application/json")
+      else:
+        return HttpResponseBadRequest( \
+               json.dumps({"msg": "You must be logged in to favorite a Snippet"}), \
+               content_type = "application/json")
+    else:
+      return HttpResponseBadRequest( \
+             json.dumps({"msg": "Method must be ajax."}), \
+             content_type = "application/json")
+
+
 class SnippetDetailView(DetailView):
   """
   View a single Snippet.
   """
   template_name = "snippet/single.html"
+  model = Snippet
   
   def _allowed_methods(self):
     return ["get"]
@@ -85,7 +121,7 @@ class SnippetDetailView(DetailView):
     """
     Get Snippet based on url parameter 'urlcode'.
     """
-    snippet = get_object_or_404(Snippet, url_code = self.kwargs.get("urlcode", None))
+    snippet = get_object_or_404(self.model, url_code = self.kwargs.get("urlcode", None))
     # Update the 'hits' counter.
     SnippetExtras.objects.filter(pk = snippet.snippetextras.id).update(hits = F("hits") + 1)
     return snippet

@@ -88,6 +88,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# Python Social Auth Settings
+
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/login"
+
+
 # Django-Debug-Toolbar Settings
 
 if DEBUG == True:

@@ -12,7 +12,6 @@
   
   <h2>Title: {{ object.title }}</h2>
   <p>Language: {{ object.language }}</p>
-  <!--h4>Posted by: {-{ object.author.username }-} on {-{ object.date_added }-}</h4-->
   <h4>Posted by: {{ object.author.username }} on {{ object.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</h4>
   <div>{{ object.content|escape }}</div>
   <p>Hits: {{ object.snippetextras.hits }}</p>
@@ -23,15 +22,55 @@
     <p>{{ tag }}</p>
     {% endfor %}
   </div>
-  {# make Snippet author #}
+  
+  {% if user and not user.is_anonymous %}
+    {% csrf_token %}
+    <input id="snUrl" type="hidden" data-snippeturl="{{ object.url_code }}">
+    <a id="likeButton" href="#">Like</a>
+  {% else %}
+    <p id="likeButtonL">Like</p>
+  {% endif %}
   
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
   <script type="text/javascript">
     
+    function likeSnippet() {
+      $.ajax({
+        url: "/likeSnippet/",
+        headers: {
+          "X-CSRFToken": $.cookie("csrftoken")
+        },
+        type: "POST",
+        dataType: "json",
+        data: {
+          "snippetUrl": $("#snUrl").data("snippeturl")
+        },
+        success: function(data, status, jqXHR) {
+          console.log("Success!\n\n");
+          
+          window.sdata = data;
+          console.log(window.sdata);
+        },
+        error: function(data, status, jqXHR) {
+          console.log("Error!\n\n");
+          
+          window.sdata = data;
+          console.log(window.sdata);
+        }
+      });
+    }
+    
     $(document).ready(function() {
-      //do something here.
+      
+      // Like a snippet through an Ajax post.
+      $("#likeButton").click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        likeSnippet();
+      });
+      
     });
     
   </script>

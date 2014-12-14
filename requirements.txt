@@ -1,5 +1,6 @@
 Django==1.7.1
 arrow==0.4.4
+django-braces==1.4.0
 django-debug-toolbar==1.2.2
 django-ipware==0.1.0
 django-taggit==0.12.2

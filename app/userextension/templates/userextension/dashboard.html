@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>User Profile</title>
+	<!--[if IE]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+
+<body id="home">
+  
+  <h2>Hi {{ user.username }}!</h2>
+  
+  <p>Logged in via {{ user.userprofile.accountType }}</p>
+  <img src="http://placehold.it/200x200" width="200" height="200" alt="Social Login">
+  
+  <div>
+    <h3>Your Recent Snippets</h3>
+    {% if recentSnippets %}
+      <ul>
+        {% for rSnip in recentSnippets %}
+        <li><p>{{ rSnip.title }} - on {{ rSnip.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</p></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+    <h2>No snippets to show.</h2>
+    {% endif %}
+  </div>
+  
+  <p><label for="website-url"></label><input type="text" id="website-url" name="websiteUrl" placeholder="ex. http://mysite.com"></p>
+  <p><label for="default-sn-language"></label><input></p>
+  
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+  <script type="text/javascript">
+    
+    $(document).ready(function() {
+      //do something here.
+    });
+    
+  </script>
+</body>
+</html>

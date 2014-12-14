@@ -7,10 +7,11 @@ urlpatterns = patterns("",
   url(r"^new/$", TemplateView.as_view(template_name = "snippet/new.html"), name = "new"),
   # Create a new Snippet (AJAX).
   url(r"^newSnippet/$", views.SnippetCreateView.as_view(), name = "newSnippet"),
+  # Like a snippet (AJAX).
+  url(r"^likeSnippet/$", views.SnippetFavoriteView.as_view(), name = "likeSnippet"),
   # View all Snippets (optional page token for pagination).
   url(r"^snippets(?:/(?P<pg>\d+))?/$", views.SnippetListView.as_view(), name = "allSnippet"),
   # Search Snippets.
-  ## When this template is being served, clear session search variables.
   url(r"^search/$", views.SnippetSearchFormView.as_view(template_name = "snippet/searchForm.html"), name = "searchFormSnippet"),
   url(r"^search/results(?:/(?P<pg>[\d]+))?/$", views.SnippetSearchView.as_view(), name = "searchSnippet"),
   # View a single Snippet.
