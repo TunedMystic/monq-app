@@ -99,5 +99,5 @@ LOGIN_URL = "/login"
 if DEBUG == True:
   INSTALLED_APPS += ("debug_toolbar.apps.DebugToolbarConfig",)
   
-  INTERNAL_IPS = ("127.0.0.1", "192.168.241.1")
+  INTERNAL_IPS = ("127.0.0.1", "192.168.241.1", "54.84.169.151", "24.90.8.194")
 

@@ -22,6 +22,7 @@ def getFilterTerms(query):
   q.add(Q(tags__name__in=query.split(" ")), Q.OR)
   return q
 
+
 class qSession(object):
   """
   Simple mixin to clear the 'searchSnippetQ' session variable.
