@@ -15,16 +15,35 @@
   <p>Logged in via {{ user.userprofile.accountType }}</p>
   <img src="http://placehold.it/200x200" width="200" height="200" alt="Social Login">
   
+  <!-- Recently made Snippets. -->
   <div>
     <h3>Your Recent Snippets</h3>
-    {% if recentSnippets %}
-      <ul>
-        {% for rSnip in recentSnippets %}
-        <li><p>{{ rSnip.title }} - on {{ rSnip.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</p></li>
-        {% endfor %}
-      </ul>
+    {% if recentMadeSnippets %}
+       <ul>
+         {% for snippet in recentMadeSnippets %}
+         <li>
+           <p>{{ snippet.title }} - on {{ snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</p>
+         </li>
+         {% endfor %}
+       </ul>
     {% else %}
-    <h2>No snippets to show.</h2>
+      <h2>No Snippets made yet.</h2>
+    {% endif %}
+  </div>
+  
+  <!-- Recently liked Snippets. -->
+  <div>
+    <h3>Liked Snippets</h3>
+    {% if recentLikedSnippets %}
+       <ul>
+         {% for snippetLike in recentLikedSnippets %}
+         <li>
+           <p>You liked {{ snippetLike.snippet.title }} - on {{ snippetLike.date_liked|date:"SHORT_DATETIME_FORMAT" }}</p>
+         </li>
+         {% endfor %}
+       </ul>
+    {% else %}
+      <h2>No Snippets liked yet.</h2>
     {% endif %}
   </div>
   

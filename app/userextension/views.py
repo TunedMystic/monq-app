@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import View, DetailView
+from django.views.generic import View, DetailView, ListView
 from django.contrib.auth import get_user_model, authenticate, login
 from django.http import Http404, HttpResponseBadRequest
 from ipware.ip import get_ip, get_real_ip
 from braces.views import LoginRequiredMixin
+#from snippet.models import Snippet
 
 User = get_user_model()
 
@@ -46,6 +47,7 @@ class UserProfileView(DetailView):
   def get_context_data(self, **kwargs):
     context = super(UserProfileView, self).get_context_data(**kwargs)
     usr = context["object"]
+    # Collect recent Snippets made by the public User.
     context["recentSnippets"] = usr.snippet_set.all().order_by("-date_added_raw")[:self.limit_by]
     return context
 
@@ -66,3 +68,48 @@ class UserDashboardView(LoginRequiredMixin, DetailView):
     else:
       # User is not logged in... redirect to login page....
       raise Http404
+  
+  def get_context_data(self, **kwargs):
+    context = super(UserDashboardView, self).get_context_data(**kwargs)
+    usr = context["object"]
+    # Get the most recent Snippets made.
+    context["recentMadeSnippets"] = usr.snippet_set.all().order_by("-date_added_raw")[:self.limit_by]
+    # Get the most recent Snippets liked.
+    context["recentLikedSnippets"] = usr.snippetlike_set.all().order_by("-date_liked")[:self.limit_by]
+    return context
+
+
+class UserSnippetsView(LoginRequiredMixin, ListView):
+  """
+  Display all Snippets of the (logged-in) User.
+  Results are paginated.
+  """
+  #model = Snippet
+  template_name = "userextension/usersnippets.html"
+  paginate_by = 4
+  page_kwarg = "pg"
+  login_url = "/login/"
+  
+  def get_queryset(self):
+    """
+    Returns the (paginated) results of all Snippets made by the (logged-in) User.
+    """
+    return self.request.user.snippet_set.all().order_by("-date_added_raw")
+
+
+class UserSnippetLikesView(LoginRequiredMixin, ListView):
+  """
+  Displays all Snippets liked by the (logged-in) User.
+  Results are paginated.
+  """
+  #model = Snippet
+  template_name = "userextension/userlikedsnippets.html"
+  paginate_by = 4
+  page_kwarg = "pg"
+  login_url = "/login/"
+  
+  def get_queryset(self):
+    """
+    Returns the (paginated) results of all Snippets liked by the (logged-in) User.
+    """
+    return self.request.user.snippetlike_set.all().order_by("-date_liked")
