@@ -56,5 +56,6 @@ target/
 # Web App
 bin/
 include/
+local/
 lib/
 *.sqlite3
