@@ -134,9 +134,9 @@ class SnippetDetailView(DetailView):
     """
     Check if the (logged in) User has already liked this Snippet.
     """
-    contex = super(SnippetDetailView, self).get_context_data(**kwargs)
-    if request.user and not request.user.is_anonymous():
-      context["alreadyLiked"] = request.user.snippetlike_set.filter( \
+    context = super(SnippetDetailView, self).get_context_data(**kwargs)
+    if self.request.user and not self.request.user.is_anonymous():
+      context["alreadyLiked"] = self.request.user.snippetlike_set.filter( \
                                 snippetextras__snippet__id = context["object"].id).exists()
     return context
   

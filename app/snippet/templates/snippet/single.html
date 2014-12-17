@@ -58,6 +58,13 @@
           
           window.sdata = data;
           console.log(window.sdata);
+          
+          // If you successfully UNfavorited a Snippet.
+          if(data.deleted == true)
+            $("#likeButton").text("Like");
+          // If you successfully favorited a Snippet.
+          else
+            $("#likeButton").text("You Liked");
         },
         error: function(data, status, jqXHR) {
           console.log("Error!\n\n");
