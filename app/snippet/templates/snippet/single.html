@@ -26,7 +26,13 @@
   {% if user and not user.is_anonymous %}
     {% csrf_token %}
     <input id="snUrl" type="hidden" data-snippeturl="{{ object.url_code }}">
-    <a id="likeButton" href="#">Like</a>
+    
+    {% if alreadyLiked %}
+      <a id="likeButton" href="#">You Liked</a>
+    {% else %}
+      <a id="likeButton" href="#">Like</a>
+    {% endif %}
+    
   {% else %}
     <p id="likeButtonL">Like</p>
   {% endif %}

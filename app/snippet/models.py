@@ -78,7 +78,7 @@ class SnippetExtras(models.Model):
   # The number of times the Snippet has been viewed.
   hits = models.PositiveIntegerField(blank = False, default = 0)
   # The number of likes the Snippet has.
-  likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank = True)
+  likes = models.ManyToManyField(settings.AUTH_USER_MODEL, through = "SnippetLike", blank = True)
   # The editor's theme for this Snippet.
   editorTheme = models.CharField(max_length = 20, default = editorthemes._AMBIANCE, blank = False)
   
@@ -101,3 +101,23 @@ def createSnippetExtras(sender, **kwargs):
 
 # Connect the signal.
 models.signals.post_save.connect(createSnippetExtras, sender = Snippet)
+
+
+class SnippetLike(models.Model):
+  """
+  A model to represent the the "Favorited" relationship between an User and a Snippet.
+  Also records the date and time the Snippet was favorited.
+  """
+  # Relation to SnippetExtras.
+  snippetextras = models.ForeignKey(SnippetExtras, blank = False)
+  # Relation to User.
+  author = models.ForeignKey(settings.AUTH_USER_MODEL, blank = False)
+  # Date of favoriting the Snippet.
+  date_liked = models.DateTimeField(auto_now_add = True)
+  
+  @property
+  def snippet(self):
+    return self.snippetextras.snippet
+  
+  def __unicode__(self):
+    return "Fav [%s] - [%s]" %(self.author, self.snippet)

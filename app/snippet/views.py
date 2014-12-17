@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, DetailView, ListView, TemplateView, View
 from django.views.generic.edit import FormMixin, ProcessFormView
 from django.db.models import F, Q
-from .models import Snippet, SnippetExtras
+from .models import Snippet, SnippetExtras, SnippetLike
 from .forms import SnippetForm
 
 
@@ -83,28 +83,40 @@ class SnippetFavoriteView(View):
   
   def post(self, request, *args, **kwargs):
     # Check if the request was made with ajax.
+    msg = ""
+    success = False
+    deleted = False
     if request.is_ajax():
       # Check if a user is logged in.
       if request.user and not request.user.is_anonymous():
         # Get snippet based on POST data.
         try:
           s = Snippet.objects.get(url_code = request.POST.get("snippetUrl", ""))
-          s.snippetextras.likes.add(request.user)
-          s.save()
-          return HttpResponse( \
-                 json.dumps({"msg": "Successfully favorited the Snippet."}), \
-                 content_type="application/json")
+          # If the 'like' relation exists, then remove it.
+          if request.user.snippetlike_set.filter(snippetextras__snippet__pk = s.id).exists():
+            relation = SnippetLike.objects.get(snippetextras__snippet__pk = s.id)
+            relation.delete()
+            msg = "You unfavorited the Snippet."
+            deleted = True
+          # The relation does not exist, so create it.
+          else:
+            SnippetLike.objects.create(author = request.user, snippetextras = s.snippetextras)
+          msg = "Successfully favorited the Snippet."
+          success = True
         except Snippet.DoesNotExist:
-          return HttpResponseBadRequest( \
-                 json.dumps({"msg": "We could not find that Snippet."}), \
-                 content_type = "application/json")
+          msg = "We could not find that Snippet."
       else:
-        return HttpResponseBadRequest( \
-               json.dumps({"msg": "You must be logged in to favorite a Snippet"}), \
-               content_type = "application/json")
+        msg = "You must be logged in to favorite a Snippet."
+    else:
+      msg = "Method must be ajax."
+    # Return appropriate response.
+    if success:
+      return HttpResponse( \
+             json.dumps({"msg": msg, "deleted": deleted}), \
+             content_type="application/json")
     else:
       return HttpResponseBadRequest( \
-             json.dumps({"msg": "Method must be ajax."}), \
+             json.dumps({"msg": msg}), \
              content_type = "application/json")
 
 
@@ -117,6 +129,16 @@ class SnippetDetailView(DetailView):
   
   def _allowed_methods(self):
     return ["get"]
+  
+  def get_context_data(self, **kwargs):
+    """
+    Check if the (logged in) User has already liked this Snippet.
+    """
+    contex = super(SnippetDetailView, self).get_context_data(**kwargs)
+    if request.user and not request.user.is_anonymous():
+      context["alreadyLiked"] = request.user.snippetlike_set.filter( \
+                                snippetextras__snippet__id = context["object"].id).exists()
+    return context
   
   def get_object(self):
     """
