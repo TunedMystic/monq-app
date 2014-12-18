@@ -1,2 +1,4 @@
 ~ Exclude private Snippets from search results and list views.
+~ Display login info on dashboard.
+~ Turn all tags into lowercase when validating.
 ~ Start planning website (design and elements).
