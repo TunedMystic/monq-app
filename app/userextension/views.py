@@ -1,13 +1,14 @@
+import json
+import arrow
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views.generic import View, DetailView, ListView
 from django.views.generic.edit import ProcessFormView
 from django.contrib.auth import get_user_model, authenticate, login
-from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, Http404
 from ipware.ip import get_ip, get_real_ip
 from braces.views import LoginRequiredMixin
 from .forms import DashboardForm
-import arrow
 
 User = get_user_model()
 
@@ -93,6 +94,26 @@ class UserDashboardView(LoginRequiredMixin, DetailView, ProcessFormView):
     # Get the User login details.
     context["loginDetails"] = usr.userprofile.getLoginDetailsList()
     return context
+  
+  def post(self, request, *args, **kwargs):
+    """
+    Validates the DashboardForm and updates UserProfile.
+    """
+    form = self.form_class(request.POST, instance = request.user.userprofile)
+    if form.is_valid():
+        return self.form_valid(form)
+    else:
+        return self.form_invalid(form)
+  
+  def form_valid(self, form):
+    savedSnippet = form.save()
+    d = {
+      "msg": "Profile successfully updated.",
+    }
+    return HttpResponse(json.dumps(d), content_type = "application/json")
+  
+  def form_invalid(self, form):
+    return HttpResponseBadRequest(json.dumps(form.errors), content_type = "application/json")
 
 
 class UserSnippetsView(LoginRequiredMixin, ListView):

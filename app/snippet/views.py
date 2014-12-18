@@ -255,7 +255,7 @@ class SnippetSearchView(ListView, ProcessFormView):
   Search Snippets (with pagination).
   """
   model = Snippet
-  template_name = "snippet/search.html"
+  template_name = "snippet/results.html"
   paginate_by = 3
   page_kwarg = "pg"
   
@@ -292,5 +292,8 @@ class SnippetSearchView(ListView, ProcessFormView):
       return None
     
     q = getFilterTerms(searchQ)
-    results = Snippet.objects.filter(q).distinct().exclude(visibility = "private")
+    results = Snippet.objects.filter(q)\
+             .distinct()\
+             .exclude(visibility = "private")\
+             .order_by("-date_added_raw")
     return results

@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from jsonfield import JSONField
-from snippet.definitions import editormodes
+from snippet.definitions import editormodes, editorthemes
 from definitions import accounttypes
 from django.contrib.auth.signals import user_logged_in
 import usertools
@@ -21,6 +21,8 @@ class UserProfile(models.Model):
   accountType = models.CharField(max_length = 20, default = accounttypes._LOCAL, blank = False)
   # The (programming) language that the editor will be configured with on startup.
   defaultSnippetLanguage = models.CharField(max_length = 20, default = editormodes._TEXT, blank = False)
+  # The default theme for the ace editor.
+  defaultEditorTheme = models.CharField(max_length = 20, default = editorthemes._AMBIANCE, blank = False)
   MAX_DATA_AMT = 10
   DEFAULT_LOGIN_DETAIL_DATA = {"data":[]}
   # Collection of login data for a User. (NOTE: Will collect 'date' and 'ip' of login).

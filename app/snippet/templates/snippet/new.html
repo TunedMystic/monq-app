@@ -111,5 +111,18 @@
     });
     
   </script>
+  
+  {# Use User's 'defaultSnippetLanguage' if User is logged in. #}
+  {% if user and not user.is_anonymous %}
+  <input type="hidden" id="defsniplang" data-defsniplang="{{ user.userprofile.defaultSnippetLanguage }}">
+  <input type="hidden" id="defedtheme" data-defedtheme="{{ user.userprofile.defaultEditorTheme }}">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#snippet-language").val($("#defsniplang").data("defsniplang"));
+      $("#snippet-theme").val($("#defedtheme").data("defedtheme"));
+    });
+  </script>
+  {% endif %}
+  
 </body>
 </html>

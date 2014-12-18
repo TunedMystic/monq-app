@@ -14,7 +14,8 @@ _KUROIR = "ace/theme/kuroir"
 _KATZENMILCH = "ace/theme/katzenmilch"
 
 # Dark Themes.
-_AMBIANCE = "ace/theme/ambiance"
+_AMBIANCE = "ambiance"
+_AMBIANCEl = "ace/theme/ambiance"
 _CHAOS = "ace/theme/chaos"
 _CLOUDS_MIDNIGHT = "ace/theme/clouds_midnight"
 _COBALT = "ace/theme/cobalt"

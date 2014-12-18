@@ -8,5 +8,5 @@ class DashboardForm(forms.ModelForm):
   """
   class Meta:
     model = UserProfile
-    # fields = ["websiteUrl", "defaultSnippetLanguage"]
-    excludes = ["user", "accountType", "loginDetails"]
+    # fields = ["websiteUrl", "defaultSnippetLanguage", "defaultEditorLanguage"]
+    exclude = ["user", "accountType", "loginDetails"]
