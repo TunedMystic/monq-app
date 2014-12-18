@@ -109,7 +109,7 @@ class SnippetLike(models.Model):
   Also stores the date of favoriting.
   """
   # The Snippet being favorited.
-  snippetextras = models.ForeignKey(SnippetExtras)
+  snippetextras = models.ForeignKey(SnippetExtras, blank = False)
   # The User that favorites the Snippet.
   author = models.ForeignKey(settings.AUTH_USER_MODEL, blank = False)
   # The time and date that the User favorited the Snippet.
