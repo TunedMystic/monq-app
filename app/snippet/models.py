@@ -111,10 +111,17 @@ class SnippetLike(models.Model):
   # The Snippet being favorited.
   snippetextras = models.ForeignKey(SnippetExtras)
   # The User that favorites the Snippet.
-  author = models.ForeignKey(settings.AUTH_USER_MODEL)
+  author = models.ForeignKey(settings.AUTH_USER_MODEL, blank = False)
   # The time and date that the User favorited the Snippet.
   date_liked = models.DateTimeField(auto_now_add = True)
   
   def __unicode__(self):
     return "Like [%s > %s]" %(self.author.username, self.snippetextras.snippet)
+  
+  @property
+  def snippet(self):
+    return self.snippetextras.snippet
+  
+  def __unicode__(self):
+    return "Fav [%s] - [%s]" %(self.author, self.snippet)
 

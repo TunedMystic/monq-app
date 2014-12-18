@@ -1,6 +1,3 @@
-~ Change SnippetExtensions 'likes' attribute to a through model.
-  The new model will have two foreign keys and a datetime field (the date of liking the snippet).
-~ If the user has already liked the snippet, then change the 'Like' link to 'You Liked this'
-~ If a logged-in User goes to their public profile link, then redirect to their dashboard.
-
+~ Make 404 and 500 Pages.
+~ Plan 'About', 'FAQ', 'Contact', and other content pages.
 ~ Start planning website (design and elements).

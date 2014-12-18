@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.views.generic import CreateView, DetailView, ListView, TemplateView, View
 from django.views.generic.edit import FormMixin, ProcessFormView
 from django.db.models import F, Q
-from .models import Snippet, SnippetExtras
+from .models import Snippet, SnippetExtras, SnippetLike
 from .forms import SnippetForm
 
 
@@ -21,6 +21,7 @@ def getFilterTerms(query):
   # Search by tags.
   q.add(Q(tags__name__in=query.split(" ")), Q.OR)
   return q
+
 
 class qSession(object):
   """
@@ -46,10 +47,6 @@ class SnippetCreateView(qSession, CreateView):
     Handles POST requests, instantiating a form instance with the passed
     POST variables and then checked for validity.
     """
-    if request.is_ajax():
-      print "\nThis request is AJAX\n"
-    else:
-      print "\nThis request is Not AJAX\n"
     form_class = self.get_form_class()
     form = self.get_form(form_class)
     # Give the form information about the User.
@@ -82,48 +79,153 @@ class SnippetFavoriteView(View):
   
   def post(self, request, *args, **kwargs):
     # Check if the request was made with ajax.
+    msg = ""
+    success = False
+    deleted = False
     if request.is_ajax():
       # Check if a user is logged in.
       if request.user and not request.user.is_anonymous():
         # Get snippet based on POST data.
         try:
           s = Snippet.objects.get(url_code = request.POST.get("snippetUrl", ""))
-          s.snippetextras.likes.add(request.user)
-          s.save()
-          return HttpResponse( \
-                 json.dumps({"msg": "Successfully favorited the Snippet."}), \
-                 content_type="application/json")
+          # If the 'like' relation exists, then remove it.
+          if request.user.snippetlike_set.filter(snippetextras__snippet__pk = s.id).exists():
+            # First, filter all relations which point to the Snippet.
+            # Then, get the relation whose author equals the logged in User.
+            relation = SnippetLike.objects.filter(snippetextras__snippet__pk = s.id).get(author = request.user)
+            relation.delete()
+            msg = "You unfavorited the Snippet."
+            deleted = True
+          # The relation does not exist, so create it.
+          else:
+            SnippetLike.objects.create(author = request.user, snippetextras = s.snippetextras)
+            msg = "Successfully favorited the Snippet."
+          success = True
         except Snippet.DoesNotExist:
-          return HttpResponseBadRequest( \
-                 json.dumps({"msg": "We could not find that Snippet."}), \
-                 content_type = "application/json")
+          msg = "We could not find that Snippet."
       else:
-        return HttpResponseBadRequest( \
-               json.dumps({"msg": "You must be logged in to favorite a Snippet"}), \
-               content_type = "application/json")
+        msg = "You must be logged in to favorite a Snippet."
+    else:
+      msg = "Method must be ajax."
+    # Return appropriate response.
+    if success:
+      return HttpResponse( \
+             json.dumps({"msg": msg, "deleted": deleted}), \
+             content_type="application/json")
     else:
       return HttpResponseBadRequest( \
-             json.dumps({"msg": "Method must be ajax."}), \
+             json.dumps({"msg": msg}), \
              content_type = "application/json")
 
 
-class SnippetDetailView(DetailView):
+class SnippetDetailView(DetailView, ProcessFormView):
   """
-  View a single Snippet.
+  View a single Snippet. Private Snippets are password protected.
   """
   template_name = "snippet/single.html"
+  password_template_name = "snippet/password.html"
   model = Snippet
+  is_private = False
   
   def _allowed_methods(self):
-    return ["get"]
+    return ["get", "post"]
+  
+  def get_template_names(self):
+    """
+    If Snippet if private, override self.template with the password template.
+    """
+    if self.is_private:
+      self.template_name = self.password_template_name
+    return super(SnippetDetailView, self).get_template_names()
+  
+  def get(self, request, *args, **kwargs):
+    """
+    If Snippet if private, show password form.
+    If public, render the Snippet.
+    """
+    self.object = self.get_object()
+    context = {}
+    # If Snippet is private, then apply actions to show password form.
+    # BUT: If Snippet is private and the author is logged in, then
+    # show it without password.
+    if self.object.visibility == "private":
+      self.is_private = True
+    if (self.object.visibility == "private") and (self.object.author == request.user):
+      self.is_private = False
+    # Decide whether to render the single Snippet context.
+    if self.is_private == False:
+      context = self.get_context_data(object = self.object)
+    return self.render_to_response(context = context)
+  
+  def post(self, request, *args, **kwargs):
+    """
+    Checks if password for private Snippet is correct.
+    """
+    password = request.POST["snippetPassword"]
+    self.object = self.get_object()
+    context = {}
+    # If POSTed password is correct, view the 
+    if password == self.object.password:
+      self.is_private = False
+      context = self.get_context_data(object = self.object)
+    # Password is not correct, return password 'error'.
+    else:
+      self.is_private = True
+      context["passwordError"] = "Hmm, that password is invalid."
+    return self.render_to_response(context = context)
+  
+  def get_context_data(self, **kwargs):
+    """
+    Check if the (logged in) User has already liked this Snippet.
+    """
+    context = super(SnippetDetailView, self).get_context_data(**kwargs)
+    # If User is logged in.
+    if self.request.user and not self.request.user.is_anonymous():
+      context["alreadyLiked"] = self.request.user.snippetlike_set.filter( \
+                                snippetextras__snippet__id = context["object"].id).exists()
+    return context
   
   def get_object(self):
     """
     Get Snippet based on url parameter 'urlcode'.
     """
-    snippet = get_object_or_404(self.model, url_code = self.kwargs.get("urlcode", None))
+    snippet = get_object_or_404(self.model, url_code = self.kwargs.get("urlcode", ""))
     # Update the 'hits' counter.
     SnippetExtras.objects.filter(pk = snippet.snippetextras.id).update(hits = F("hits") + 1)
+    return snippet
+
+
+class SnippetDetailRawView(DetailView):
+  """
+  View a Snippet's content in raw text.
+  """
+  template_name = "snippet/raw.html"
+  content_type = "text/plain"
+  model = Snippet
+  
+  def get_object(self):
+    """
+    Get Snippet based on url parameter 'urlcode'.
+    """
+    snippet = get_object_or_404(self.model, url_code = self.kwargs.get("urlcode", ""))
+    return snippet
+
+
+class SnippetCopyView(DetailView):
+  """
+  Copy a Snippet's content and put it in a new form.
+  """
+  template_name = "snippet/new.html"
+  model = Snippet
+  
+  def get_object(self):
+    """
+    Get Snippet based on url parameter 'urlcode'.
+    """
+    snippet = get_object_or_404(self.model, url_code = self.kwargs.get("urlcode", ""))
+    # Users are unable to copy a private snippet.
+    if snippet.visibility == "private":
+      raise Http404
     return snippet
 
 
@@ -140,7 +242,7 @@ class SnippetListView(qSession, ListView):
     """
     Return the list of items for this view.
     """
-    return self.model.objects.all().order_by("-date_added_raw")
+    return self.model.objects.all().exclude(visibility = "private").order_by("-date_added_raw")
 
 
 class SnippetSearchFormView(qSession, TemplateView):
@@ -153,7 +255,7 @@ class SnippetSearchView(ListView, ProcessFormView):
   Search Snippets (with pagination).
   """
   model = Snippet
-  template_name = "snippet/search.html"
+  template_name = "snippet/results.html"
   paginate_by = 3
   page_kwarg = "pg"
   
@@ -190,5 +292,8 @@ class SnippetSearchView(ListView, ProcessFormView):
       return None
     
     q = getFilterTerms(searchQ)
-    results = Snippet.objects.filter(q).distinct()
+    results = Snippet.objects.filter(q)\
+             .distinct()\
+             .exclude(visibility = "private")\
+             .order_by("-date_added_raw")
     return results

@@ -15,29 +15,150 @@
   <p>Logged in via {{ user.userprofile.accountType }}</p>
   <img src="http://placehold.it/200x200" width="200" height="200" alt="Social Login">
   
+  <!-- Recently made Snippets. -->
   <div>
     <h3>Your Recent Snippets</h3>
-    {% if recentSnippets %}
-      <ul>
-        {% for rSnip in recentSnippets %}
-        <li><p>{{ rSnip.title }} - on {{ rSnip.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</p></li>
-        {% endfor %}
-      </ul>
+    {% if recentMadeSnippets %}
+       <ul>
+         {% for snippet in recentMadeSnippets %}
+         <li>
+           <p>{{ snippet.title }} - on {{ snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</p>
+         </li>
+         {% endfor %}
+       </ul>
     {% else %}
-    <h2>No snippets to show.</h2>
+      <h2>No Snippets made yet.</h2>
     {% endif %}
   </div>
   
-  <p><label for="website-url"></label><input type="text" id="website-url" name="websiteUrl" placeholder="ex. http://mysite.com"></p>
-  <p><label for="default-sn-language"></label><input></p>
+  <!-- Recently liked Snippets. -->
+  <div>
+    <h3>Liked Snippets</h3>
+    {% if recentLikedSnippets %}
+       <ul>
+         {% for snippetLike in recentLikedSnippets %}
+         <li>
+           <p>You liked {{ snippetLike.snippet.title }} - on {{ snippetLike.date_liked|date:"SHORT_DATETIME_FORMAT" }}</p>
+         </li>
+         {% endfor %}
+       </ul>
+    {% else %}
+      <h2>No Snippets liked yet.</h2>
+    {% endif %}
+  </div>
+  
+  <!-- Login Details -->
+  <div>
+    {% if loginDetails %}
+    <h3>Login Details</h3>
+       <ul>
+         {% for chunk_ip, chunk_date in loginDetails %}
+         <li>
+           <p>IP: {{ chunk_ip }} - on {{ chunk_date|date:"SHORT_DATETIME_FORMAT" }}</p>
+         </li>
+         {% endfor %}
+       </ul>
+    {% endif %}
+  </div>
+  
+  <form id="dashboardForm" action="." method="post" novalidate="novalidate">
+    {% csrf_token %}
+    
+    <input type="hidden" id="defsniplang" data-defsniplang="{{ user.userprofile.defaultSnippetLanguage }}">
+    <input type="hidden" id="defedtheme" data-defedtheme="{{ user.userprofile.defaultEditorTheme }}">
+    
+    <p><label for="website-url">Your Website Url:</label><input type="text" id="websiteUrl" name="websiteUrl" value="{{ user.userprofile.websiteUrl }}" placeholder="ex. http://mysite.com"></p>
+    <p><label for="defaultSnippetLanguage">Default Snippet Language:</label></p>
+    <select name="defaultSnippetLanguage" id="defaultSnippetLanguage">
+      <option value="" disabled="disabled" selected="selected" style="display:none;">Language Syntax</option>
+    </select>
+    <select name="defaultEditorTheme" id="defaultEditorTheme">
+      <option value="" disabled="disabled" selected="selected" style="display:none;">Editor Theme</option>
+    </select>
+    
+    <input type="submit" id="userProfileSubmitButton" value="Save Changes"/>
+  </form>
   
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-themelist.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-modelist.js"></script>
   <script type="text/javascript">
+  
+    function editorModes() {
+      var modes = ace.require("ace/ext/modelist");
+      var themes = ace.require("ace/ext/themelist");
+      
+      // Build 'Editor Mode' options.
+      _.each(modes.modes, function(element, index) {
+        $("#defaultSnippetLanguage").append($("<option/>").attr({"value": element.name}).text(element.caption));
+      });
+      
+      // Build 'Editor Theme' options.
+      _.each(themes.themes, function(element, index) {
+        $("#defaultEditorTheme").append($("<option/>").attr({"value": element.name}).text(element.caption));
+      });
+    }
+    
+    function postDashboardForm() {
+      $.ajax({
+        url: "/me/",
+        headers: {
+          "X-CSRFToken": $.cookie("csrftoken")
+        },
+        type: "post",
+        dataType: "json",
+        data: {
+          "websiteUrl": $("#websiteUrl").val(),
+          "defaultSnippetLanguage": $("#defaultSnippetLanguage").val(),
+          "defaultEditorTheme": $("#defaultEditorTheme").val(),
+        },
+        success: function(data, status, jqXHR) {
+          console.log("Success!");
+          window.sdata = data;
+        },
+        error: function(data, status, jqXHR) {
+          console.log("Success!");
+          window.sdata = data;
+        }
+      });
+    }
+    
+    function s() {
+      console.log(window.sdata.responseText);
+    }
     
     $(document).ready(function() {
-      //do something here.
+      
+      editorModes();
+      
+      // If 'defaultSnippetlanguage' exists, then get it.
+      var snipLang = $("#defsniplang").data("defsniplang");
+      // Assume that the acquired snippet is correct, and select it.
+      $("#defaultSnippetLanguage").val(snipLang);
+      if($("#defaultSnippetLanguage").val() == null)
+        // If incorrect snippet language, then revert to default "" option.
+        $("#defaultSnippetLanguage").val("");
+        
+        // If 'defaultEditorTheme' exists, then get it.
+      var edTheme = $("#defedtheme").data("defedtheme");
+      // Assume that the acquired thene is correct, and select it.
+      $("#defaultEditorTheme").val(edTheme);
+      if($("#defaultEditorTheme").val() == null)
+        // If incorrect editor theme, then revert to default "" option.
+        $("#defaultEditorTheme").val("");
+    });
+    
+    // Post Dashboard form with Ajax.
+    $(document).ready(function() {
+      
+      $("#dashboardForm").submit(function(e) {
+        e.preventDefault();
+        postDashboardForm();
+      });
+      
     });
     
   </script>

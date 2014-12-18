@@ -43,6 +43,10 @@ class SnippetForm(forms.ModelForm):
     # Do the number of tags exceed the maximum?
     if len(data) > MAX_TAGS:
       raise forms.ValidationError("Maximum of %s tags allowed per Snippet." %(MAX_TAGS))
+    
+    # Turn all tags into lower case.
+    data = [tag.lower() for tag in data]
+    
     return data
   
   def clean(self, *args, **kwargs):

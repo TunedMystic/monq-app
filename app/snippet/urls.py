@@ -10,12 +10,16 @@ urlpatterns = patterns("",
   # Like a snippet (AJAX).
   url(r"^likeSnippet/$", views.SnippetFavoriteView.as_view(), name = "likeSnippet"),
   # View all Snippets (optional page token for pagination).
-  url(r"^snippets(?:/(?P<pg>\d+))?/$", views.SnippetListView.as_view(), name = "allSnippet"),
+  url(r"^snippets(?:/(?P<pg>[\d]+))?/$", views.SnippetListView.as_view(), name = "allSnippet"),
   # Search Snippets.
   url(r"^search/$", views.SnippetSearchFormView.as_view(template_name = "snippet/searchForm.html"), name = "searchFormSnippet"),
   url(r"^search/results(?:/(?P<pg>[\d]+))?/$", views.SnippetSearchView.as_view(), name = "searchSnippet"),
   # View a single Snippet.
   url(r"^(?P<urlcode>[\w-]+)/$", views.SnippetDetailView.as_view(), name = "detailSnippet"),
+  # View a Snippet's raw text
+  url(r"^(?P<urlcode>[\w-]+)/raw/$", views.SnippetDetailRawView.as_view(), name = "rawSnippet"),
+  # Copy a Snippet's content into a new form
+  url(r"^(?P<urlcode>[\w-]+)/copy/$", views.SnippetCopyView.as_view(), name = "copySnippet"),
 )
 
 """
