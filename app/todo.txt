@@ -1,2 +1,2 @@
-~ Display login info on dashboard.
+~ Make UserProfile form in dashboard (update 'websiteUrl', and 'defaultSnippetLanguage').
 ~ Start planning website (design and elements).
