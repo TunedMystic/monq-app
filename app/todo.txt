@@ -1,2 +1,3 @@
-~ Make UserProfile form in dashboard (update 'websiteUrl', and 'defaultSnippetLanguage').
+~ Make 404 and 500 Pages.
+~ Plan 'About', 'FAQ', 'Contact', and other content pages.
 ~ Start planning website (design and elements).
