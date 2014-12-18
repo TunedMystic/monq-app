@@ -61,16 +61,47 @@
     {% endif %}
   </div>
   
-  <p><label for="website-url"></label><input type="text" id="website-url" name="websiteUrl" placeholder="ex. http://mysite.com"></p>
-  <p><label for="default-sn-language"></label><input></p>
+  <form id="userProfileForm" action="." method="post">
+    {% csrf_token %}
+    
+    <input type="hidden" id="defsniplang" data-defsniplang="{{ user.userprofile.defaultSnippetLanguage }}">
+    
+    <p><label for="website-url">Your Website Url:</label><input type="text" id="websiteUrl" name="websiteUrl" value="{{ user.userprofile.websiteUrl }}" placeholder="ex. http://mysite.com"></p>
+    <p><label for="defaultSnippetLanguage">Default Snippet Language:</label></p>
+    <select name="defaultSnippetLanguage" id="defaultSnippetLanguage">
+      <option value="" disabled="disabled" selected="selected" style="display:none;">Language Syntax</option>
+    </select>
+    
+    <input type="submit" id="userProfileSubmitButton" value="Save Changes"/>
+  </form>
   
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-modelist.js"></script>
   <script type="text/javascript">
+  
+    function editorModes() {
+      var modes = ace.require("ace/ext/modelist");
+      
+      // Build 'Editor Mode' options.
+      _.each(modes.modes, function(element, index) {
+        $("#defaultSnippetLanguage").append($("<option/>").attr({"value": element.name}).text(element.caption));
+      });
+    }
     
     $(document).ready(function() {
-      //do something here.
+      
+      editorModes();
+      
+      // If 'defaultSnippetlanguage' exists, then get it.
+      var snipLang = $("#defsniplang").data("defsniplang");
+      // Assume that the acquired snippet is correct, and select it.
+      $("#defaultSnippetLanguage").val(snipLang);
+      if($("#defaultSnippetLanguage").val() == null)
+        // If incorrect snippet language, then revert to default "" option.
+        $("#defaultSnippetLanguage").val("");
     });
     
   </script>

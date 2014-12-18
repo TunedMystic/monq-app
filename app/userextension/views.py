@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views.generic import View, DetailView, ListView
+from django.views.generic.edit import ProcessFormView
 from django.contrib.auth import get_user_model, authenticate, login
 from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
 from ipware.ip import get_ip, get_real_ip
 from braces.views import LoginRequiredMixin
+from .forms import DashboardForm
 import arrow
 
 User = get_user_model()
@@ -62,11 +64,13 @@ class UserProfileView(DetailView):
     return context
 
 
-class UserDashboardView(LoginRequiredMixin, DetailView):
+class UserDashboardView(LoginRequiredMixin, DetailView, ProcessFormView):
   """
   Render the (Logged-in) user's dashboard.
+  Accept Ajax form to update User's (userprofile) data.
   """
   model = User
+  form_class = DashboardForm
   template_name = "userextension/dashboard.html"
   limit_by = 10
   login_url = "/login/"
