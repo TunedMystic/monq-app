@@ -47,6 +47,20 @@
     {% endif %}
   </div>
   
+  <!-- Login Details -->
+  <div>
+    {% if loginDetails %}
+    <h3>Login Details</h3>
+       <ul>
+         {% for chunk_ip, chunk_date in loginDetails %}
+         <li>
+           <p>IP: {{ chunk_ip }} - on {{ chunk_date|date:"SHORT_DATETIME_FORMAT" }}</p>
+         </li>
+         {% endfor %}
+       </ul>
+    {% endif %}
+  </div>
+  
   <p><label for="website-url"></label><input type="text" id="website-url" name="websiteUrl" placeholder="ex. http://mysite.com"></p>
   <p><label for="default-sn-language"></label><input></p>
   

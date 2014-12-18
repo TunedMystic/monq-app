@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model, authenticate, login
 from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
 from ipware.ip import get_ip, get_real_ip
 from braces.views import LoginRequiredMixin
-#from snippet.models import Snippet
+import arrow
 
 User = get_user_model()
 
@@ -86,6 +86,8 @@ class UserDashboardView(LoginRequiredMixin, DetailView):
     context["recentMadeSnippets"] = usr.snippet_set.all().order_by("-date_added_raw")[:self.limit_by]
     # Get the most recent Snippets liked.
     context["recentLikedSnippets"] = usr.snippetlike_set.all().order_by("-date_liked")[:self.limit_by]
+    # Get the User login details.
+    context["loginDetails"] = usr.userprofile.getLoginDetailsList()
     return context
 
 

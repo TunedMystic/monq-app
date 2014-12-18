@@ -5,6 +5,7 @@ from snippet.definitions import editormodes
 from definitions import accounttypes
 from django.contrib.auth.signals import user_logged_in
 import usertools
+import arrow
 
 
 class UserProfile(models.Model):
@@ -20,7 +21,7 @@ class UserProfile(models.Model):
   accountType = models.CharField(max_length = 20, default = accounttypes._LOCAL, blank = False)
   # The (programming) language that the editor will be configured with on startup.
   defaultSnippetLanguage = models.CharField(max_length = 20, default = editormodes._TEXT, blank = False)
-  MAX_DATA_AMT = 25
+  MAX_DATA_AMT = 10
   DEFAULT_LOGIN_DETAIL_DATA = {"data":[]}
   # Collection of login data for a User. (NOTE: Will collect 'date' and 'ip' of login).
   loginDetails = JSONField(default = DEFAULT_LOGIN_DETAIL_DATA)
@@ -48,9 +49,22 @@ class UserProfile(models.Model):
     if len(self.loginDetails["data"]) == UserProfile.MAX_DATA_AMT:
       self.loginDetails["data"].pop(0)
     self.loginDetails["data"].append([{"date": date, "ip": ipAddress}])
-    
-  # Print login details
+  
+  def getLoginDetailsList(self):
+    """
+    Turn self.loginDetails into a list of tuples.
+    """
+    d = []
+    # Limit the amount of login details returned.
+    for chunk in self.loginDetails["data"][:self.MAX_DATA_AMT]:                                                                               
+      d.append((chunk[0]["ip"], arrow.get(chunk[0]["date"]).datetime))
+    d.reverse()
+    return d
+  
   def getLoginDetails(self):
+    """
+    Print login details for admin site.
+    """
     details = ""
     for chunk in self.loginDetails["data"]:
       details += "Date - " + usertools.formatDate(usertools.isoToDate(chunk[0]["date"]))
