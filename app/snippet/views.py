@@ -242,7 +242,7 @@ class SnippetListView(qSession, ListView):
     """
     Return the list of items for this view.
     """
-    return self.model.objects.all().order_by("-date_added_raw")
+    return self.model.objects.all().exclude(visibility = "private").order_by("-date_added_raw")
 
 
 class SnippetSearchFormView(qSession, TemplateView):
@@ -292,5 +292,5 @@ class SnippetSearchView(ListView, ProcessFormView):
       return None
     
     q = getFilterTerms(searchQ)
-    results = Snippet.objects.filter(q).distinct()
+    results = Snippet.objects.filter(q).distinct().exclude(visibility = "private")
     return results
