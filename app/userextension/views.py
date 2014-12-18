@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.urlresolvers import reverse
 from django.views.generic import View, DetailView, ListView
 from django.contrib.auth import get_user_model, authenticate, login
-from django.http import Http404, HttpResponseBadRequest
+from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
 from ipware.ip import get_ip, get_real_ip
 from braces.views import LoginRequiredMixin
 #from snippet.models import Snippet
@@ -36,6 +37,15 @@ class UserProfileView(DetailView):
   model = User
   template_name = "userextension/profile.html"
   limit_by = 10
+  
+  def get(self, request, *args, **kwargs):
+    """
+    If the User views their own public profile, 
+    redirect to the 'dashboard' url.
+    """
+    if request.user.username == kwargs.get("usrname", ""):
+      return HttpResponseRedirect(reverse("userext:dashboard"))
+    return super(UserProfileView, self).get(request, *args, **kwargs)
   
   def get_object(self):
     """

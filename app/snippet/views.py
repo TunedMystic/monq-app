@@ -47,10 +47,6 @@ class SnippetCreateView(qSession, CreateView):
     Handles POST requests, instantiating a form instance with the passed
     POST variables and then checked for validity.
     """
-    if request.is_ajax():
-      print "\nThis request is AJAX\n"
-    else:
-      print "\nThis request is Not AJAX\n"
     form_class = self.get_form_class()
     form = self.get_form(form_class)
     # Give the form information about the User.
@@ -135,6 +131,7 @@ class SnippetDetailView(DetailView):
     Check if the (logged in) User has already liked this Snippet.
     """
     context = super(SnippetDetailView, self).get_context_data(**kwargs)
+    # If User is logged in.
     if self.request.user and not self.request.user.is_anonymous():
       context["alreadyLiked"] = self.request.user.snippetlike_set.filter( \
                                 snippetextras__snippet__id = context["object"].id).exists()
@@ -144,9 +141,43 @@ class SnippetDetailView(DetailView):
     """
     Get Snippet based on url parameter 'urlcode'.
     """
-    snippet = get_object_or_404(self.model, url_code = self.kwargs.get("urlcode", None))
+    snippet = get_object_or_404(self.model, url_code = self.kwargs.get("urlcode", ""))
     # Update the 'hits' counter.
     SnippetExtras.objects.filter(pk = snippet.snippetextras.id).update(hits = F("hits") + 1)
+    return snippet
+
+
+class SnippetDetailRawView(DetailView):
+  """
+  View a Snippet's content in raw text.
+  """
+  template_name = "snippet/raw.html"
+  content_type = "text/plain"
+  model = Snippet
+  
+  def get_object(self):
+    """
+    Get Snippet based on url parameter 'urlcode'.
+    """
+    snippet = get_object_or_404(self.model, url_code = self.kwargs.get("urlcode", ""))
+    return snippet
+
+
+class SnippetCopyView(DetailView):
+  """
+  Copy a Snippet's content and put it in a new form.
+  """
+  template_name = "snippet/new.html"
+  model = Snippet
+  
+  def get_object(self):
+    """
+    Get Snippet based on url parameter 'urlcode'.
+    """
+    snippet = get_object_or_404(self.model, url_code = self.kwargs.get("urlcode", ""))
+    # Users are unable to copy a private snippet.
+    if snippet.visibility == "private":
+      raise Http404
     return snippet
 
 

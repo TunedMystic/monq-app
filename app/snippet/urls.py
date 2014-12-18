@@ -16,6 +16,10 @@ urlpatterns = patterns("",
   url(r"^search/results(?:/(?P<pg>[\d]+))?/$", views.SnippetSearchView.as_view(), name = "searchSnippet"),
   # View a single Snippet.
   url(r"^(?P<urlcode>[\w-]+)/$", views.SnippetDetailView.as_view(), name = "detailSnippet"),
+  # View a Snippet's raw text
+  url(r"^(?P<urlcode>[\w-]+)/raw/$", views.SnippetDetailRawView.as_view(), name = "rawSnippet"),
+  # Copy a Snippet's content into a new form
+  url(r"^(?P<urlcode>[\w-]+)/copy/$", views.SnippetCopyView.as_view(), name = "copySnippet"),
 )
 
 """

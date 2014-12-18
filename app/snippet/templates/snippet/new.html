@@ -12,9 +12,20 @@
   
   <form id="snippetForm" novalidate="novalidate">
     {% csrf_token %}
-    <input type="text" id="snippet-title" name="title" value="{{ copyTitle }}">
     
-    <textarea id="snippet-content" name="content">{{ copyContent }}</textarea>
+    {% if object %}
+      {# If copying, modify original Snippet title. #}
+      <input type="text" id="snippet-title" name="title" value="{{ object.title }} - Copy">
+    {% else %}
+      <input type="text" id="snippet-title" name="title" value="">
+    {% endif %}
+    
+    {% if object %}
+      {# If copying, add hidden fields for language #}
+      <input type="hidden" id="copyLanguage" data-language="{{ object.language }}">
+    {% endif %}
+    
+    <textarea id="snippet-content" name="content">{{ object.content }}</textarea>
     
     <select id="snippet-language" name="language">
       <option value="python">Python</option>
@@ -85,12 +96,17 @@
     }
     
     $(document).ready(function() {
-      putData();
+      //putData();
       
+      // Post new Snippet using Ajax.
       $("#snippetForm").submit(function(e) {
         e.preventDefault();
         postNewSnippet();
       });
+      
+      // If the hidden language element exists, use it in the form.
+      if($("#copyLanguage").length)
+        $("#snippet-language").val($("#copyLanguage").data("language"));
       
     });
     
