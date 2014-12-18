@@ -1,3 +1,2 @@
-~ Implement a Snippet 'copy' and Snippet 'raw' functionality.
-~ If a logged-in User goes to their public profile link, then redirect to their dashboard.
+~ Exclude private Snippets from search results and list views.
 ~ Start planning website (design and elements).
