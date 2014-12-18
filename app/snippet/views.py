@@ -90,14 +90,16 @@ class SnippetFavoriteView(View):
           s = Snippet.objects.get(url_code = request.POST.get("snippetUrl", ""))
           # If the 'like' relation exists, then remove it.
           if request.user.snippetlike_set.filter(snippetextras__snippet__pk = s.id).exists():
-            relation = SnippetLike.objects.get(snippetextras__snippet__pk = s.id)
+            # First, filter all relations which point to the Snippet.
+            # Then, get the relation whose author equals the logged in User.
+            relation = SnippetLike.objects.filter(snippetextras__snippet__pk = s.id).get(author = request.user)
             relation.delete()
             msg = "You unfavorited the Snippet."
             deleted = True
           # The relation does not exist, so create it.
           else:
             SnippetLike.objects.create(author = request.user, snippetextras = s.snippetextras)
-          msg = "Successfully favorited the Snippet."
+            msg = "Successfully favorited the Snippet."
           success = True
         except Snippet.DoesNotExist:
           msg = "We could not find that Snippet."
@@ -116,15 +118,61 @@ class SnippetFavoriteView(View):
              content_type = "application/json")
 
 
-class SnippetDetailView(DetailView):
+class SnippetDetailView(DetailView, ProcessFormView):
   """
-  View a single Snippet.
+  View a single Snippet. Private Snippets are password protected.
   """
   template_name = "snippet/single.html"
+  password_template_name = "snippet/password.html"
   model = Snippet
+  is_private = False
   
   def _allowed_methods(self):
-    return ["get"]
+    return ["get", "post"]
+  
+  def get_template_names(self):
+    """
+    If Snippet if private, override self.template with the password template.
+    """
+    if self.is_private:
+      self.template_name = self.password_template_name
+    return super(SnippetDetailView, self).get_template_names()
+  
+  def get(self, request, *args, **kwargs):
+    """
+    If Snippet if private, show password form.
+    If public, render the Snippet.
+    """
+    self.object = self.get_object()
+    context = {}
+    # If Snippet is private, then apply actions to show password form.
+    # BUT: If Snippet is private and the author is logged in, then
+    # show it without password.
+    if self.object.visibility == "private":
+      self.is_private = True
+    if (self.object.visibility == "private") and (self.object.author == request.user):
+      self.is_private = False
+    # Decide whether to render the single Snippet context.
+    if self.is_private == False:
+      context = self.get_context_data(object = self.object)
+    return self.render_to_response(context = context)
+  
+  def post(self, request, *args, **kwargs):
+    """
+    Checks if password for private Snippet is correct.
+    """
+    password = request.POST["snippetPassword"]
+    self.object = self.get_object()
+    context = {}
+    # If POSTed password is correct, view the 
+    if password == self.object.password:
+      self.is_private = False
+      context = self.get_context_data(object = self.object)
+    # Password is not correct, return password 'error'.
+    else:
+      self.is_private = True
+      context["passwordError"] = "Hmm, that password is invalid."
+    return self.render_to_response(context = context)
   
   def get_context_data(self, **kwargs):
     """

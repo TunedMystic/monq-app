@@ -36,6 +36,7 @@ def main():
   Tyler = makeUser("tyler", "tyler@gmail.com", "tyler")
   Bella = makeUser("bella", "bella@gmail.com", "bella")
   Drogo = get_user_model().objects.create_superuser(username = "drogo", email = "drogo@gmail.com", password = "drogo")
+  Anakin = get_user_model().objects.create_superuser(username = "anakin", email = "anakin@gmail.com", password = "anakin")
   
   # Make some Snippets!
   
