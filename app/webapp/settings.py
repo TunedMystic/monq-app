@@ -25,6 +25,8 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
+if not DEBUG:
+  ALLOWED_HOSTS = [".nitrousbox.com", "127.0.0.1", "0.0.0.0", "localhost"]
 
 
 # Application definition

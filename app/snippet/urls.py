@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 import views
 
 urlpatterns = patterns("",
+  url(r"^/?$", TemplateView.as_view(template_name = "snippet/index.html"), name = "index"),
   # Template for new Snippet.
   url(r"^new/$", TemplateView.as_view(template_name = "snippet/new.html"), name = "new"),
   # Create a new Snippet (AJAX).
