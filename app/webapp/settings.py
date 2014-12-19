@@ -95,6 +95,7 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login"
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/"
 
 TEMPLATE_CONTEXT_PROCESSORS = (
    'django.contrib.auth.context_processors.auth',

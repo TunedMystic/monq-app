@@ -2,7 +2,7 @@ import json
 import arrow
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.views.generic import View, DetailView, ListView
+from django.views.generic import View, DetailView, ListView, TemplateView
 from django.views.generic.edit import ProcessFormView
 from django.contrib.auth import get_user_model, authenticate, login
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, Http404
@@ -31,6 +31,15 @@ class LoginTest(View):
     else:
       return HttpResponseBadRequest("The user does not exist.")
 
+
+class LoginView(TemplateView):
+  template_name = "userextension/login.html"
+  
+  def get_context_data(self, **kwargs):
+    context = super(LoginView, self).get_context_data(**kwargs)
+    context["request"] = self.request
+    return context
+    
 
 class UserProfileView(DetailView):
   """
@@ -61,7 +70,9 @@ class UserProfileView(DetailView):
     context = super(UserProfileView, self).get_context_data(**kwargs)
     usr = context["object"]
     # Collect recent Snippets made by the public User.
-    context["recentSnippets"] = usr.snippet_set.all().order_by("-date_added_raw")[:self.limit_by]
+    context["recentSnippets"] = usr.snippet_set.all()\
+                                   .exclude(visibility = "private")\
+                                   .order_by("-date_added_raw")[:self.limit_by]
     return context
 
 

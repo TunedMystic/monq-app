@@ -10,36 +10,34 @@
 
 <body id="home">
   
-  <h1>Login here...</h1>
-  
-  {% block main %}
- <div>
- <h1>Login Here</h1>
+ {% block main %}
+   <div>
+   <h1>Login Here</h1>
 
- <p>
-   <ul>
-   {% if user and not user.is_anonymous %}
-     <li>
-       <a>Hello {{ user.username }}!</a>
-     </li>
-     <li>
-       <a href="{% url 'auth:logout' %}?next={{ request.path }}">Logout</a>
-     </li>
-   {% else %}
-     <li>
-       <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Login with Facebook</a>
-     </li>
-     <li>
-       <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
-     </li>
-     <li>
-       <a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}">Login with Twitter</a>
-     </li>
-   {% endif %}
-   </ul>
- </p>
- </div>
-{% endblock %}
+   <p>
+     <ul>
+     {% if user and not user.is_anonymous %}
+       <li>
+         <a>Hello {{ user.username }}!</a>
+       </li>
+       <li>
+         <a href="{% url 'auth_logout' %}">Logout</a>
+       </li>
+     {% else %}
+       <li>
+         <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
+       </li>
+       <li>
+         <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
+       </li>
+       <li>
+         <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a>
+       </li>
+     {% endif %}
+     </ul>
+   </p>
+   </div>
+  {% endblock %}
   
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
