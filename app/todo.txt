@@ -1,3 +1,2 @@
-~ Integrate Python Social Auth.
+~ Start styling website.
 ~ Plan 'About', 'FAQ', 'Contact', and other content pages.
-~ Start planning website (design and elements).
