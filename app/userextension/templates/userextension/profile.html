@@ -13,7 +13,7 @@
   <img src="https://sigil.cupcake.io/{{ object.username }}?inverted=1&w=72" width="72" height="72">
   <h2>{{ object.username }}</h2>
   
-  <p>Active via {{ object.userprofile.accountType }}</p>
+  <p>Active via {{ object.userprofile.getProvider }}</p>
   
   <div>
     <h3>Recent Snippets:</h3>

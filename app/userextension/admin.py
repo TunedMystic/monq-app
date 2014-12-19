@@ -6,8 +6,8 @@ from .models import UserProfile
 
 class UserProfileInline(admin.StackedInline):
   model = UserProfile
-  fields = ("websiteUrl", "accountType", "defaultSnippetLanguage", "getLoginDetails")
-  readonly_fields = ("accountType", "getLoginDetails",)
+  fields = ("websiteUrl", "defaultSnippetLanguage", "getLoginDetails")
+  readonly_fields = ("getLoginDetails",)
   can_delete = False
 
 

@@ -12,8 +12,8 @@
   
   <h2>Hi {{ user.username }}!</h2>
   
-  <p>Logged in via {{ user.userprofile.accountType }}</p>
-  <img src="http://placehold.it/200x200" width="200" height="200" alt="Social Login">
+  <p>Logged in via {{ user.userprofile.getProvider }}</p>
+  <img src="http://placehold.it/200x200&text={{ user.userprofile.getProvider }}" width="200" height="200" alt="Social Login">
   <img src="https://sigil.cupcake.io/{{ user.username }}?inverted=1&w=216" width="216" height="216">
   
   <!-- Recently made Snippets. -->

@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from jsonfield import JSONField
 from snippet.definitions import editormodes, editorthemes
-from definitions import accounttypes
+from definitions.accounttypes import _LOCAL as BACKEND_LOCAL, SOCIAL_BACKENDS
 from django.contrib.auth.signals import user_logged_in
 import usertools
 import arrow
@@ -17,8 +17,6 @@ class UserProfile(models.Model):
   user = models.OneToOneField(settings.AUTH_USER_MODEL, unique = True)
   # User's website.
   websiteUrl = models.URLField(max_length = 80, blank = True)
-  # Which social account id the User associated with? (Twitter, Facebook, Googleplus)
-  accountType = models.CharField(max_length = 20, default = accounttypes._LOCAL, blank = False)
   # The (programming) language that the editor will be configured with on startup.
   defaultSnippetLanguage = models.CharField(max_length = 20, default = editormodes._TEXT, blank = False)
   # The default theme for the ace editor.
@@ -73,6 +71,20 @@ class UserProfile(models.Model):
       details += "   :   "  + "IP - " + chunk[0]["ip"] + "\n"
     return details
   getLoginDetails.short_description = "Login Details"
+  
+  def getProvider(self):
+    """
+    Returns the name of the Social Backend that the User is
+    currently authenticated with. If None, defaults to 'Local'.
+    """
+    # Social Auth backend exists.
+    if self.user.social_auth.all():
+      try:
+        return SOCIAL_BACKENDS[self.user.social_auth.all()[0].provider]
+      except KeyError:
+        return BACKEND_LOCAL
+    else:
+      return BACKEND_LOCAL
   
   def __unicode__(self):
     return "%s's profile" %(self.user.username)
