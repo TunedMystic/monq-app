@@ -4,6 +4,7 @@ import views
 
 urlpatterns = patterns("",
   #url(r"^.*$", TemplateView.as_view(template_name = "nil/index.html"), name = "index"),
+  url(r"^login/$", TemplateView.as_view(template_name = "nil/login.html"), name = "login")
   url(r"^404/$", views.error404, name = "error404"),
   url(r"^500/$", views.error500, name = "error500"),
 )

@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "social.apps.django_app.default",
     "taggit",
     # Site-specific apps.
     "nil",
@@ -94,6 +95,34 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login"
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+   'django.contrib.auth.context_processors.auth',
+   'django.core.context_processors.debug',
+   'django.core.context_processors.i18n',
+   'django.core.context_processors.media',
+   'django.core.context_processors.static',
+   'django.core.context_processors.tz',
+   'django.contrib.messages.context_processors.messages',
+   'social.apps.django_app.context_processors.backends',
+   'social.apps.django_app.context_processors.login_redirect',
+)
+
+AUTHENTICATION_BACKENDS = (
+   'social.backends.facebook.FacebookOAuth2',
+   'social.backends.google.GoogleOAuth2',
+   'social.backends.twitter.TwitterOAuth',
+   'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_FACEBOOK_KEY = "334742830038719"
+SOCIAL_AUTH_FACEBOOK_SECRET = "1a591b1d6034e8d3be479080f27ba5ba"
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "808726665778-pmbtui7cbl54brf30bbun3383e776dmm.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "z_6U7_a8UK57Ou-nw3Y3yzm4"
+
+SOCIAL_AUTH_TWITTER_KEY = "0oiz8mSVpeqQXzFG6PeAZJu1D"
+SOCIAL_AUTH_TWITTER_SECRET = "1rBrH6v2mzcdRrDzXhojr4dbKLLKI7yX5qZEtN9zs6bvwsMoDB"
 
 
 # Django-Debug-Toolbar Settings
