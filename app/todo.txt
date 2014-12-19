@@ -1,2 +1,3 @@
+~ Integrate static assets from front-end project.
 ~ Start styling website.
 ~ Plan 'About', 'FAQ', 'Contact', and other content pages.
