@@ -1,11 +1,12 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
+from .definitions.defaultSnippetText import txt
 import views
 
 urlpatterns = patterns("",
-  url(r"^/?$", TemplateView.as_view(template_name = "snippet/index.html"), name = "index"),
+  url(r"^/?$", TemplateView.as_view(template_name = "snippet/index.html"), name = "index", kwargs={"defaultSnippetText": txt}),
   # Template for new Snippet.
-  url(r"^new/$", TemplateView.as_view(template_name = "snippet/new.html"), name = "new"),
+  url(r"^new/$", TemplateView.as_view(template_name = "snippet/new.html"), name = "new", kwargs = {"newSnippet": True}),
   # Create a new Snippet (AJAX).
   url(r"^newSnippet/$", views.SnippetCreateView.as_view(), name = "newSnippet"),
   # Like a snippet (AJAX).

@@ -1,101 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>New Snippet</title>
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
+{% extends "snippet/_base.html" %}
+{% load staticfiles %}
 
-<body id="home">
-  
-  <h2 id="snippet-title">Title: <span>{{ object.title }}</span></h2>
-  <p id="snippet-language">Language: <span>{{ object.language }}</span></p>
+
+{% block main %}
   <h4 id="snippet-author">Posted by: {{ object.author.username }} on {{ object.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</h4>
-  <div id="snippet-content">{{ object.content|escape }}</div>
-  <p id="snippet-hits">Hits: <span>{{ object.snippetextras.hits }}</span></p>
-  <p id="snippet-likes">Likes: <span>{{ object.snippetextras.getLikes }}</span></p>
-  <div id="snippet-tags">
-    <h4>Tags:</h4>
-    {% for tag in object.tags.all %}
-    <p>{{ tag }}</p>
-    {% endfor %}
-  </div>
-  
-  {% if user and not user.is_anonymous %}
-    {% csrf_token %}
-    <input id="snUrl" type="hidden" data-snippeturl="{{ object.url_code }}">
-    
-    {% if alreadyLiked %}
-      <a id="likeButton" href="#">You Liked</a>
-    {% else %}
-      <a id="likeButton" href="#">Like</a>
-    {% endif %}
-    
-  {% else %}
-    <p id="likeButtonL">Like</p>
-  {% endif %}
-  
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript">
-    
-    function likeSnippet() {
-      $.ajax({
-        url: "/likeSnippet/",
-        headers: {
-          "X-CSRFToken": $.cookie("csrftoken")
-        },
-        type: "POST",
-        dataType: "json",
-        data: {
-          "snippetUrl": $("#snUrl").data("snippeturl")
-        },
-        success: function(data, status, jqXHR) {
-          console.log("Success!\n\n");
-          
-          window.sdata = data;
-          console.log(window.sdata);
-          
-          // If you successfully UNfavorited a Snippet.
-          if(data.deleted == true) {
-            $("#likeButton").text("Like");
-            // Decrement the "Likes" element.
-            var likes = parseInt($("#snippet-likes span").text(), 10);
-            likes -= 1;
-            $("#snippet-likes span").text(likes);
-          }
-          // If you successfully favorited a Snippet.
-          else {
-            $("#likeButton").text("You Liked");
-            // Increment the "Likes" element.
-            var likes = parseInt($("#snippet-likes span").text(), 10);
-            likes += 1;
-            $("#snippet-likes span").text(likes);
-          }
-        },
-        error: function(data, status, jqXHR) {
-          console.log("Error!\n\n");
-          
-          window.sdata = data;
-          console.log(window.sdata);
-        }
-      });
-    }
-    
-    $(document).ready(function() {
-      
-      // Like a snippet through an Ajax post.
-      $("#likeButton").click(function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        likeSnippet();
-      });
-      
-    });
-    
-  </script>
-</body>
-</html>
+	{% include "snippet/_editor.html" %}
+{% endblock %}
+
+
+{% block scriptsbottom %}
+  <script type="text/javascript" src="{% static 'snippet/js/_editor.js' %}"></script>  
+	
+	{# Disable certain fields if you are viewing a Snippet #}
+	{% if viewingSnippet %}
+	<script type="text/javascript">
+		// Disable Bootstrap toggle switch, and Token Fields
+		$(document).ready(function() {
+			
+			// Disable Tokenfield.
+			$("#snippet-tags-tokenfield").prop("disabled", true);
+			$("#snippet-tags-tokenfield").prop("placeholder", "");
+			$("#snippet-tags").tokenfield('readonly');
+			
+			// Disable Snippet title.
+			$("#snippet-title").prop("disabled", true);
+			
+			// Disable snippet language.
+			$('#snippet-language').prop('disabled', true).trigger("chosen:updated");
+			
+		});
+	</script>
+	{% endif %}
+	
+	
+	{# If viewing, give the editor the Snippet language. #}
+	{% if viewingSnippet %}
+	  <script type="text/javascript">
+			$(document).ready(function() {
+				// Change the snippet-language select field.
+				$("#snippet-language").val($("#hidden-snippet-language").data("hidden-snippet-language"));
+				// Update the 'Chosen' plugin.
+				$("#snippet-language").trigger("chosen:updated");
+				// Trigger 'change' event to for the Snippet Editor's listeners to hook into.
+				$("#snippet-language").trigger("change");
+			});
+		</script>
+	{% endif %}
+	
+	
+	{# If you are logged in and you are viewing a Snippet, you have the option to 'like' it. #}
+	{% if user and not user.is_anonymous and viewingSnippet %}
+		<script type="text/javascript" src="{% static 'snippet/js/singleSnippet.js' %}"></script>
+		{% csrf_token %}
+		<input id="snUrl" type="hidden" data-snippeturl="{{ object.url_code }}">
+		
+		{% if alreadyLiked %}
+			<a id="likeButton" href="#">You Liked</a>
+		{% else %}
+			<a id="likeButton" href="#">Like</a>
+		{% endif %}
+		
+	{% else %}
+		<p id="likeButtonL">Like</p>
+	{% endif %}
+
+{% endblock %}
+

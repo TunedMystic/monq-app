@@ -38,10 +38,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="#" class="navbar-webpage navbar-brand navbar-brand-title monq-verylight">
+          <a href="{% url 'snippet:index' %}" class="navbar-webpage navbar-brand navbar-brand-title monq-verylight">
             monq
           </a>
-          <a href="#" class="navbar-brand navbar-brand-img">
+          <a href="{% url 'snippet:index' %}" class="navbar-brand navbar-brand-img">
             <img class="" src="{% static 'nil/img/logo.png' %}" alt="monq logo" width="79" height="50">
           </a>
 
@@ -49,12 +49,16 @@
         </div> <!--/.navbar-header -->
         
         <div class="collapse navbar-collapse" id="page-header-dropdown">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a class="monq-light" href="{% url 'snippet:index' %}"><strong>Home</strong></a></li>
-            <li><a class="monq-light" href="#"><strong>About</strong></a></li>
-            <li><a class="monq-light" href="#"><strong>FAQ</strong></a></li>
+          <ul class="nav navbar-nav navbar-right topNavLinks">
+            <li><h3><strong><a class="monq-light" href="{% url 'snippet:index' %}">Home</a></strong></h3></li>
+            <li><h3><strong><a class="monq-light" href="/">About</a></strong></h3></li>
+            <li><h3><strong><a class="monq-light" href="/">FAQ</a></strong></h3></li>
           </ul>
         </div> <!--/.navbar-collapse -->
+        
+        <style>
+          
+        </style>
         
       </div>
     </nav> <!--/.page-header -->
@@ -82,7 +86,7 @@
         
         {% if user and user.is_authenticated %}
           <!-- Split button -->
-          <ul class="nav navbar-form navbar-right text-center login-button">
+          <ul class="nav navbar-form navbar-right text-center login-button login-button-authenticated">
             <div class="btn-group">
               <button id="authenticatedUserButton" type="button" class="btn userAuthButton">{{ user.username }}</button>
               <button type="button" class="btn userAuthButton dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -179,6 +183,12 @@
     <script type="text/javascript" src="{% static 'snippet/js/_base.js' %}"></script>
     
     {% block scriptsbottom %}{% endblock %}
+    
+    <script type="text/javascript">
+      function s() {
+        console.log(window.sdata.responseText);
+      }
+    </script>
     
   </body>
 </html>

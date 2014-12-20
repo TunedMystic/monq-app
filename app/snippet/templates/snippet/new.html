@@ -1,128 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>New Snippet</title>
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
+{% extends "snippet/_base.html" %}
+{% load staticfiles %}
 
-<body id="home">
+{% block main %}
   
-  <form id="snippetForm" novalidate="novalidate">
-    {% csrf_token %}
-    
-    {% if object %}
-      {# If copying, modify original Snippet title. #}
-      <input type="text" id="snippet-title" name="title" value="{{ object.title }} - Copy">
-    {% else %}
-      <input type="text" id="snippet-title" name="title" value="">
-    {% endif %}
-    
-    {% if object %}
-      {# If copying, add hidden fields for language #}
-      <input type="hidden" id="copyLanguage" data-language="{{ object.language }}">
-    {% endif %}
-    
-    <textarea id="snippet-content" name="content">{{ object.content }}</textarea>
-    
-    <select id="snippet-language" name="language">
-      <option value="python">Python</option>
-      <option value="ruby">Ruby</option>
-      <option value="javascript">Javascript</option>
-      <option value="text" selected>Text</option>
-    </select>
-    
-    <select id="snippet-visibility" name="visibility">
-      <option value="public" selected>Public</option>
-      <option value="private">Private</option>
-    </select>
-    
-    <input type="password" id="snippet-password" name="password">
-    
-    <input type="text" id="snippet-tags" name="tags">
-    
-    <input type="submit" value="Create Snippet">
-  </form>
+	{% include "snippet/_editor.html" %}
+	
+{% endblock %}
+
+{% block scriptsbottom %}
+
+	<script type="text/javascript" src="{% static 'snippet/js/_editor.js' %}"></script>
+	<script type="text/javascript" src="{% static 'snippet/js/postSnippet.js' %}"></script>
   
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript">
-    
-    function postNewSnippet() {
-      $.ajax({
-        url: "/newSnippet/",
-        headers: {
-          "X-CSRFToken": $.cookie("csrftoken")
-        },
-        type: "POST",
-        dataType: "json",
-        data: {
-          "title": $("#snippet-title").val(),
-          "content": $("#snippet-content").val(),
-          "language": $("#snippet-language").val(),
-          "visibility": $("#snippet-visibility").val(),
-          "password": $("#snippet-password").val(),
-          "tags": $("#snippet-tags").val()
-        },
-        success: function(data, status, jqXHR) {
-          console.log("Success!\n\n");
-          
-          window.sdata = data;
-          console.log(window.sdata);
-        },
-        error: function(data, status, jqXHR) {
-          console.log("Error!\n\n");
-          
-          window.sdata = data;
-          console.log(window.sdata);
-        }
-      });
-    }
-    
-    function putData() {
-      $("#snippet-title").val("Hello"),
-      $("#snippet-content").val("This is test post!"),
-      $("#snippet-language").val("python"),
-      $("#snippet-visibility").val("public"),
-      $("#snippet-password").val(),
-      $("#snippet-tags").val("hello, omg, misc")
-    }
-    
-    function s() {
-      console.log(window.sdata.responseText);
-    }
-    
-    $(document).ready(function() {
-      //putData();
-      
-      // Post new Snippet using Ajax.
-      $("#snippetForm").submit(function(e) {
-        e.preventDefault();
-        postNewSnippet();
-      });
-      
-      // If the hidden language element exists, use it in the form.
-      if($("#copyLanguage").length)
-        $("#snippet-language").val($("#copyLanguage").data("language"));
-      
-    });
-    
-  </script>
-  
-  {# Use User's 'defaultSnippetLanguage' if User is logged in. #}
-  {% if user and not user.is_anonymous %}
+  {# Use User's editor settings if User is logged in, and you are not copying or viewing a Snippet. #}
+  {% if user and not user.is_anonymous and newSnippet %}
   <input type="hidden" id="defsniplang" data-defsniplang="{{ user.userprofile.defaultSnippetLanguage }}">
   <input type="hidden" id="defedtheme" data-defedtheme="{{ user.userprofile.defaultEditorTheme }}">
   <script type="text/javascript">
     $(document).ready(function() {
+			// Change the snippet-language select field.
       $("#snippet-language").val($("#defsniplang").data("defsniplang"));
+			// Update the 'Chosen' plugin.
+			$("#snippet-language").trigger("chosen:updated");
+			// Trigger 'change' event to for the Snippet Editor's listeners to hook into.
+			$("#snippet-language").trigger("change");
+			
+			// Change the snippet-theme select field.
       $("#snippet-theme").val($("#defedtheme").data("defedtheme"));
+			// Update the 'Chosen' plugin.
+			$("#snippet-theme").trigger("chosen:updated");
+			// Trigger 'change' event to for the Snippet Editor's listeners to hook into.
+			$("#snippet-theme").trigger("change");
     });
   </script>
   {% endif %}
-  
-</body>
-</html>
+	
+	
+	{# If viewing or copying, give the editor the Snippet language. #}
+	{% if copying %}
+	  <script type="text/javascript">
+			$(document).ready(function() {
+				// Change the snippet-language select field.
+				$("#snippet-language").val($("#hidden-snippet-language").data("hidden-snippet-language"));
+				// Update the 'Chosen' plugin.
+				$("#snippet-language").trigger("chosen:updated");
+				// Trigger 'change' event to for the Snippet Editor's listeners to hook into.
+				$("#snippet-language").trigger("change");
+			});
+		</script>
+	{% endif %}
+
+
+{% endblock %}
+

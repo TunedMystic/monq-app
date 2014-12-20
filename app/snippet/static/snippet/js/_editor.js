@@ -24,6 +24,7 @@ $(document).ready(function() {
   // Build the editor
   // **
   var editor = ace.edit("snippet-content");
+  window.editor = editor;
   editor.setTheme("ace/theme/ambiance");
   editor.getSession().setMode("ace/mode/javascript");
   
@@ -33,9 +34,11 @@ $(document).ready(function() {
   // Add listener to 'snippet-language'.
   $("#snippet-language").change(function() {
     var changed = $(this).find("option:selected");
-    console.log("Mode has changed to " + changed.text());
-    
-    editor.getSession().setMode("ace/mode/" + changed.val());
+    if(changed.text() != "Language") {
+      console.log("Mode has changed to " + changed.text());
+       
+      editor.getSession().setMode("ace/mode/" + changed.val());
+    }
   });
   
   // Add listener to 'snippet-theme'.

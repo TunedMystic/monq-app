@@ -55,6 +55,17 @@
 p.tagline {
   margin-left: 30px !important;
 }
+.topNavLinks {
+  margin-right: -25px;
+}
+.topNavLinks li h3 {
+  margin: 0px 0px;
+  padding: 15px 15px;
+  font-size: 16px;
+}
+.topNavLinks li h3 strong a:hover {
+  text-decoration: none;
+}
 .userAuthButton { 
   color: #FFFFFF; 
   background-color: #7074C5; 
@@ -181,6 +192,9 @@ hr.fancy-hr {
 @media(min-width:768px){
   .login-button {
     margin-right: 0px;
+  }
+  .login-button-authenticated {
+    padding-right: 0px;
   }
   p.tagline {
     margin-left: 0px;

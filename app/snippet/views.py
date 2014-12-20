@@ -183,6 +183,7 @@ class SnippetDetailView(DetailView, ProcessFormView):
     if self.request.user and not self.request.user.is_anonymous():
       context["alreadyLiked"] = self.request.user.snippetlike_set.filter( \
                                 snippetextras__snippet__id = context["object"].id).exists()
+    context["viewingSnippet"] = True
     return context
   
   def get_object(self):
@@ -227,6 +228,11 @@ class SnippetCopyView(DetailView):
     if snippet.visibility == "private":
       raise Http404
     return snippet
+  
+  def get_context_data(self, **kwargs):
+    context = super(SnippetCopyView, self).get_context_data(**kwargs)
+    context["copying"] = True
+    return context
 
 
 class SnippetListView(qSession, ListView):
