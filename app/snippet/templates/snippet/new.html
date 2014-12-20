@@ -9,10 +9,10 @@
 
 {% block scriptsbottom %}
 
-	<script type="text/javascript" src="{% static 'snippet/js/_editor.js' %}"></script>
+	<script type="text/javascript" src="{% static 'nil/js/monq/_editor.js' %}"></script>
 	<script type="text/javascript" src="{% static 'snippet/js/postSnippet.js' %}"></script>
   
-  {# Use User's editor settings if User is logged in, and you are not copying or viewing a Snippet. #}
+  {# If you are Logged in, and you are making a new Snippet, use User's editor settings. #}
   {% if user and not user.is_anonymous and newSnippet %}
   <input type="hidden" id="defsniplang" data-defsniplang="{{ user.userprofile.defaultSnippetLanguage }}">
   <input type="hidden" id="defedtheme" data-defedtheme="{{ user.userprofile.defaultEditorTheme }}">
@@ -27,6 +27,30 @@
 			
 			// Change the snippet-theme select field.
       $("#snippet-theme").val($("#defedtheme").data("defedtheme"));
+			// Update the 'Chosen' plugin.
+			$("#snippet-theme").trigger("chosen:updated");
+			// Trigger 'change' event to for the Snippet Editor's listeners to hook into.
+			$("#snippet-theme").trigger("change");
+    });
+  </script>
+  {% endif %}
+	
+	
+	{# If you are anonymous, and you are making a new Snippet, use default editor settings. #}
+  {% if user and user.is_anonymous and newSnippet %}
+  <input type="hidden" id="defsniplang" data-defsniplang="{{ user.userprofile.defaultSnippetLanguage }}">
+  <input type="hidden" id="defedtheme" data-defedtheme="{{ user.userprofile.defaultEditorTheme }}">
+  <script type="text/javascript">
+    $(document).ready(function() {
+			// Change the snippet-language select field.
+      $("#snippet-language").val("text");
+			// Update the 'Chosen' plugin.
+			$("#snippet-language").trigger("chosen:updated");
+			// Trigger 'change' event to for the Snippet Editor's listeners to hook into.
+			$("#snippet-language").trigger("change");
+			
+			// Change the snippet-theme select field.
+      $("#snippet-theme").val("ambiance");
 			// Update the 'Chosen' plugin.
 			$("#snippet-theme").trigger("chosen:updated");
 			// Trigger 'change' event to for the Snippet Editor's listeners to hook into.

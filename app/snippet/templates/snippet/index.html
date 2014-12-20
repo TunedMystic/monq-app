@@ -1,12 +1,18 @@
 {% extends "snippet/_base.html" %}
 {% load staticfiles %}
 
+{% block stylestop %}
+  <style>
+		#snippet-content {
+			font-size: 20px;
+		}
+	</style>
+{% endblock %}
+
 {% block main %}
-  
 	{% include "snippet/_editor.html" %}
-	
 {% endblock %}
 
 {% block scriptsbottom %}
-	<script type="text/javascript" src="{% static 'snippet/js/_editor.js' %}"></script>
+	<script type="text/javascript" src="{% static 'nil/js/monq/_editor.js' %}"></script>
 {% endblock %}
