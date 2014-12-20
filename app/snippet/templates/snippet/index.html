@@ -1,29 +1,12 @@
+{% extends "snippet/_base.html" %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Snippet | Home</title>
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
 
-<body id="home">
+{% block main %}
   
-  <h1>Snippet Home Page</h1>
-  
- 
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <!--script type="text/javascript" src="{% static 'webapp/js/jquery.min.js' %}"></script -->
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript">
-    
-    $(document).ready(function() {
-      //do something here.
-    });
-    
-  </script>
-</body>
-</html>
+	{% include "snippet/_editor.html" %}
+	
+{% endblock %}
+
+{% block scriptsbottom %}
+	<script type="text/javascript" src="{% static 'snippet/js/_editor.js' %}"></script>
+{% endblock %}

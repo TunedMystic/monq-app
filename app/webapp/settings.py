@@ -89,6 +89,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = "static"
 
 
 # Python Social Auth Settings
@@ -127,8 +128,8 @@ SOCIAL_AUTH_TWITTER_SECRET = "1rBrH6v2mzcdRrDzXhojr4dbKLLKI7yX5qZEtN9zs6bvwsMoDB
 
 
 # Django-Debug-Toolbar Settings
-
-if DEBUG == True:
+DDJT = True
+if DEBUG and DDJT:
   INSTALLED_APPS += ("debug_toolbar.apps.DebugToolbarConfig",)
   
   INTERNAL_IPS = ("127.0.0.1", "192.168.241.1", "54.84.169.151", "24.90.8.194")

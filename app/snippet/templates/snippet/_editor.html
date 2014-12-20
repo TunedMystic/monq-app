@@ -1,0 +1,95 @@
+<!-- Snippet Form -->
+<form action="." method="POST" novalidate="novalidate">
+  <fieldset class="snippet-fieldset-top">
+    <!-- Top Row -->
+    <div class="row">
+    
+      <div class="col-md-6 col-sm-12">
+        <div class="form-inline">
+          <label for="snippet-title" class="sr-only">Title</label>
+          <input type="text" class="form-control" id="snippet-title" placeholder="Name this Snippet." name="title" value="{{ snippet.title }}">
+          
+          <select name="language" id="snippet-language" class="form-control" data-placeholder="Language">
+            <option value="" disabled="disabled" selected="selected" style="display:none;">Language</option>
+          </select>
+          <input type="hidden" id="hidden-snippet-language" data-snippet-language="{{ snippet.language }}">
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-sm-12">
+        <div id="snippet-top-font-theme" class="form-inline pull-right">
+          <select name="snippet-font-size" id="snippet-font-size" class="form-control" data-placeholder="Font Size">
+            <option value="" disabled="disabled" selected="selected" style="display:none;">Font Size</option>
+            <option value="12px">12px</option>
+            <option value="14px">14px</option>
+            <option value="16px">16px</option>
+            <option value="18px">18px</option>
+            <option value="18px">20px</option>
+          </select>
+          
+          <select name="theme" id="snippet-theme" class="form-control" data-placeholder="Editor Theme">
+            <option value="" disabled="disabled" selected="selected" style="display:none;">Editor Theme</option>
+          </select>
+          <input type="hidden" id="hidden-snippet-theme" data-snippet-theme="{{ defaultTheme }}">
+        </div>
+      </div>
+      
+    </div>
+    <!-- /Top Row -->
+  </fieldset>
+  
+  <!-- Ace Editor Row -->
+  <fieldset class="snippet-fieldset-middle">
+    <div class="row">
+      <div class="col-md-12">
+        <div id="snippet-content" class="" name="content">{% if snippet.content %}{{ snippet.content|escape }}{% else %}{{ defaultSnippetText|escape }}{% endif %}</div>
+      </div>
+    </div>
+  </fieldset>
+  <!-- Ace Editor Row -->
+  
+  <fieldset class="snippet-fieldset-bottom">
+    
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12 form-horizontal">
+        <div class="form-group">
+          <label for="snippet-tags" class="col-md-4 col-sm-12 col-xs-12 control-label snippet-tags-label">Tags:</label>
+          <div class="col-md-8 col-sm-12 col-xs-12">
+            <input type="text" class="form-control" id="snippet-tags" value="{{ snippet.tags.all }}" placeholder="Tags are separated by commas.">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6"></div>
+      
+      <div class="col-md-6 col-sm-12 col-xs-12"> <!-- col-md-6 -->
+        <div class="form-inline pull-right snippet-visibility-group ">
+          <div class="form-group">
+            <label for="snippet-tags" class="control-label">Make this Snippet</label>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="snippet-visibility-check" name="snippet-visibility-check" data-toggle="toggle" data-on="Private" data-off="Public" data-onstyle="warning">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="snippet-visibility" name="visibility" placeholder="password" disabled>
+          </div>
+        </div>
+      </div> <!-- /col-md-6 -->
+    </div> <!--/row-->
+    
+    <div class="row"> <!-- row -->
+      <div class="col-md-9"></div>
+      
+      <div class="col-md-3 col-xs-12">
+        <div class="form-group">
+          <button id="snippet-submit-button" type="submit" class="btn btn-primary btn-lg btn-block">Save Snippet</button>
+        </div>
+      </div>
+    </div> <!-- /row -->
+    
+  </fieldset>
+  
+</form>
+<!-- /Snippet Form -->
