@@ -1,0 +1,20 @@
+
+#update-details {
+  padding: 12px !important;
+}
+
+.update-details-column {
+  
+}
+
+.update-details-column p {
+  margin-bottom: 0px;
+}
+
+.update-details-column-like-button h4 {
+  margin: 0px inherit;
+}
+
+.update-details-column-like-button a:hover {
+  text-decoration: none;
+}

@@ -61,7 +61,8 @@ class SnippetCreateView(qSession, CreateView):
     form.save_m2m()
     d = {
       "msg": "This post was a success.",
-      "next": savedSnippet.url_code
+      #"next": savedSnippet.url_code
+      "next": self.request.build_absolute_uri(reverse("snippet:detailSnippet", kwargs = {"urlcode": savedSnippet.url_code}))
     }
     return HttpResponse(json.dumps(d), content_type = "application/json")
   

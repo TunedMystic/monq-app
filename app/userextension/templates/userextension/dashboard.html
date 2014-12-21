@@ -129,7 +129,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for snippet in user.snippet_set.all %}
+							{% for snippet in user.snippet_set.all reversed %}
 							<tr>
 								{% ifequal snippet.visibility "public" %}
 									<td><span data-toggle="tooltip" data-placement="left" title="Public Snippet"><i class="fa fa-user fa-2"></i></span></td>
@@ -165,7 +165,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for snippet in user.snippetlike_set.all %}
+							{% for snippet in user.snippetlike_set.all reversed %}
 							<tr>
 								{% ifequal snippet.snippet.visibility "public" %}
 									<td><span data-toggle="tooltip" data-placement="left" title="Public Snippet"><i class="fa fa-user fa-2"></i></span></td>
@@ -280,8 +280,8 @@
 						"defaultEditorTheme": $("#defaultEditorTheme").val(),
 					},
 					success: function(data, status, jqXHR) {
-						//console.log("Success!");
-						//window.sdata = data;
+						////console.log("Success!");
+						////window.sdata = data;
 						
 						utils.comboSuccess("Successfully updated your profile!");
 						
@@ -292,8 +292,8 @@
 						}
 					},
 					error: function(data, status, jqXHR) {
-						//console.log("Error!");
-						//window.sdata = data;
+						////console.log("Error!");
+						////window.sdata = data;
 						utils.comboAlert(data);
 					}
 				});

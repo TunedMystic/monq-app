@@ -1,3 +1,5 @@
+var ed = {} || ed;
+
 // Build the ui.
 $(document).ready(function() {
   
@@ -24,7 +26,7 @@ $(document).ready(function() {
   // Build the editor
   // **
   var editor = ace.edit("snippet-content");
-  window.editor = editor;
+  ed.editor = editor;
   editor.setTheme("ace/theme/ambiance");
   editor.getSession().setMode("ace/mode/javascript");
   

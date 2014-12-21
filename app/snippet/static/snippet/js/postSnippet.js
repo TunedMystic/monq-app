@@ -2,6 +2,16 @@
 
 $(document).ready(function() {
   
+  var DefaultLanguage = "javascript";
+  
+  function collectTags(s) {
+    var tagslist = [];
+    _.each($(s).tokenfield("getTokens"), function(el, i) {
+        tagslist.push(el["value"]);
+    });
+    return tagslist.join(",");
+  }
+  
   // Post Snippet data to create it.
   function postNewSnippet() {
     $.ajax({
@@ -13,23 +23,26 @@ $(document).ready(function() {
       dataType: "json",
       data: {
         "title": $("#snippet-title").val(),
-        "content": $("#snippet-content").val(),
-        "language": $("#snippet-language").val(),
-        "visibility": $("#snippet-visibility").val(),
-        "password": $("#snippet-password").val(),
-        "tags": $("#snippet-tags").val()
+        "content": ed.editor.getSession().getValue(),
+        "language": $("#snippet-language").val() || DefaultLanguage,
+        "visibility": $("#snippet-visibility-check").prop("checked") === false ? "public" : "private",
+        "password": $("#snippet-visibility").val(),
+        "tags": collectTags("#snippet-tags")
       },
       success: function(data, status, jqXHR) {
-        console.log("Success!\n\n");
+        ////console.log("Success!\n\n");
         
-        window.sdata = data;
-        console.log(window.sdata);
+        ////window.sdata = data;
+        ////console.log(window.sdata);
+        // Redirect to new snippet.
+        window.location = sdata.next;
       },
       error: function(data, status, jqXHR) {
-        console.log("Error!\n\n");
+        ////console.log("Error!\n\n");
         
-        window.sdata = data;
-        console.log(window.sdata);
+        ////window.sdata = data;
+        ////console.log(window.sdata);
+        utils.comboAlert(data);
       }
     });
   }

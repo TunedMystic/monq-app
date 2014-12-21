@@ -46,9 +46,9 @@ $(document).ready(function() {
      window.location = "/new/";
   });
   
-  $("#popularSnippets").click(function(e) {
+  $("#recentSnippetsButton").click(function(e) {
      e.preventDefault();
-     window.location = "/new/";
+     window.location = "/snippets/";
   });
   
 });

@@ -12,33 +12,47 @@ $(document).ready(function() {
         "snippetUrl": $("#snUrl").data("snippeturl")
       },
       success: function(data, status, jqXHR) {
-        console.log("Success!\n\n");
+        ////console.log("Success!\n\n");
         
-        window.sdata = data;
-        console.log(window.sdata);
+        ////window.sdata = data;
+        ////console.log(window.sdata);
+        
+        var message = "";
         
         // If you successfully UNfavorited a Snippet.
         if(data.deleted == true) {
-          $("#likeButton").text("Like");
+          $("#likeButton span").text("Like!");
+          $("#likeButton span").removeClass("label-primary");
+          $("#likeButton span").addClass("label-warning");
           // Decrement the "Likes" element.
           var likes = parseInt($("#snippet-likes span").text(), 10);
           likes -= 1;
           $("#snippet-likes span").text(likes);
+          
+          message = "You unfavorited this snippet!";
         }
         // If you successfully favorited a Snippet.
         else {
-          $("#likeButton").text("You Liked");
+          $("#likeButton span").text("You Liked");
+          $("#likeButton span").removeClass("label-warning");
+          $("#likeButton span").addClass("label-primary");
           // Increment the "Likes" element.
           var likes = parseInt($("#snippet-likes span").text(), 10);
           likes += 1;
           $("#snippet-likes span").text(likes);
+          
+          message = "You favorited this snippet!";
         }
+        
+        utils.comboSuccess(message);
       },
       error: function(data, status, jqXHR) {
-        console.log("Error!\n\n");
+        ////console.log("Error!\n\n");
         
-        window.sdata = data;
-        console.log(window.sdata);
+        ////window.sdata = data;
+        ////console.log(window.sdata);
+        
+        utils.comboAlert(data);
       }
     });
   }

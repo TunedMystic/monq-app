@@ -8,13 +8,32 @@ LOGGED_IN_SIZE = (300000, "300kb")
 ANONYMOUS_SIZE = (50000, "50kb")
 # Max number of tags allowed.
 MAX_TAGS = 10
+# Content error messages
+content_errors = {
+  'required': 'You must enter some Snippet content.',
+  'invalid': 'Hmm, the content does not look right.'
+}
+
 
 class SnippetForm(forms.ModelForm):
+  
+  content = forms.CharField(error_messages = content_errors)
+  
   class Meta:
     model = Snippet
     #fields = ["title", "content", "language", "visibility", "password", "tags" ]
     exclude = ["author", "date_added_raw", "url_code"]
-  
+   
+  def clean_title(self, *args, **kwargs):
+    """
+    Checks is the title is an empty string.
+    If it is, then change it to 'Untitled'.
+    """
+    data = self.cleaned_data.get("content", None)
+    if not data:
+      data = "Untitled"
+    return data
+    
   def clean_content(self, *args, **kwargs):
     """
     Checks the size(in bytes) of the content being posted.
@@ -34,7 +53,7 @@ class SnippetForm(forms.ModelForm):
         if Snippet.rawSize(data) > LOGGED_IN_SIZE[0]:
           raise forms.ValidationError("Users cannot post content exceeding " + LOGGED_IN_SIZE[1])
     return data
-  
+   
   def clean_tags(self, *args, **kwargs):
     """
     Checks if the number of tags is within the allowed limit.
@@ -48,7 +67,7 @@ class SnippetForm(forms.ModelForm):
     data = [tag.lower() for tag in data]
     
     return data
-  
+   
   def clean(self, *args, **kwargs):
     """
     If visibility is private, Snippet must gave a password.
@@ -68,7 +87,7 @@ class SnippetForm(forms.ModelForm):
     if (cleaned_data.get("visibility", None) == "public") and (cleaned_data.get("password", None) != ""):
       cleaned_data["password"] = ""
     return cleaned_data
-  
+   
   def save(self):
     """
     Override default save. If authenticated user exists, make it the Snippet's author.
