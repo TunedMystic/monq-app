@@ -26,12 +26,13 @@
 						
 						<!-- Hits -->
 						<div class="col-md-4 col-sm-4 col-xs-3 update-details-column">
-							<p>Hits:&nbsp;&nbsp;&nbsp;<span class="text-muted">{{ object.snippetextras.hits }}</span></p>
+							<ul class="list-inline">
+								<li><p>Hits:&nbsp;&nbsp;<span class="text-muted">{{ object.snippetextras.hits }}</span></p></li>
+								<li><p id="snippet-likes">Likes:&nbsp;&nbsp;<span class="text-muted">{{ object.snippetextras.getLikes }}</span></p></li>
+							</ul>
 						</div>
-						<div class="col-md-4 col-sm-4 col-xs-3 update-details-column">
-							<p id="snippet-likes">Likes:&nbsp;&nbsp;&nbsp;<span class="text-muted">{{ object.snippetextras.getLikes }}</span></p>
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-6 update-details-column-like-button">
+						
+						<div class="col-md-4 col-sm-4 col-xs-6 update-details-column-like-button text-center">
 							{% if alreadyLiked %}
 							  <h4><a id="likeButton" href="#"><span class="label label-primary">You Liked!</span></a></h4>
 							{% else %}
@@ -39,7 +40,26 @@
 							{% endif %}
 						</div>
 						
-					</div>
+						<div class="col-md-4 col-sm-4 col-xs-3 update-details-column modify-options text-center">
+							<ul class="list-inline">
+								<li><p data-toggle="tooltip" data-placement="top" title="Copy this Snippet">
+								     <a href="{% url 'snippet:copySnippet' urlcode=object.url_code %}">
+											<span><i class="fa fa-copy"></i></span>
+										 </a>
+								</p></li>
+								
+								<li>&nbsp;&nbsp;</li>
+								
+								<li><p data-toggle="tooltip" data-placement="top" title="Raw Snippet data">
+								     <a href="{% url 'snippet:rawSnippet' urlcode=object.url_code %}">
+											<span><i class="fa fa-align-left"></i></span>
+										 </a>
+								</p></li>
+							</ul>
+						</div>
+						
+						
+					</div> <!-- /.row-->
 				</div>
 			</div>
 
@@ -55,7 +75,13 @@
 
 
 {% block scriptsbottom %}
-  <script type="text/javascript" src="{% static 'nil/js/monq/_editor.js' %}"></script>  
+  <script type="text/javascript" src="{% static 'nil/js/monq/_editor.js' %}"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('[data-toggle="tooltip"]').tooltip()
+		});
+	</script>
 	
 	{# Disable certain fields if you are viewing a Snippet #}
 	{% if viewingSnippet %}

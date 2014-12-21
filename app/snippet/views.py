@@ -304,3 +304,12 @@ class SnippetSearchView(ListView, ProcessFormView):
              .exclude(visibility = "private")\
              .order_by("-date_added_raw")
     return results
+  
+  def get_context_data(self, **kwargs):
+    """
+    Make the search query (searchQ) available in the template.
+    """
+    context = super(SnippetSearchView, self).get_context_data(**kwargs)
+    context["searchQuery"] = self.request.POST.get("searchQ", None)
+    return context
+

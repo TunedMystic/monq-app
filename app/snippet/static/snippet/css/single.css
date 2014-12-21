@@ -11,6 +11,10 @@
   margin-bottom: 0px;
 }
 
+.update-details-column ul{
+  margin-bottom: 0px;
+}
+
 .update-details-column-like-button h4 {
   margin: 0px inherit;
 }
@@ -18,3 +22,12 @@
 .update-details-column-like-button a:hover {
   text-decoration: none;
 }
+
+.modify-options {
+  
+}
+
+.modify-options i {
+  font-size: 18px;
+}
+

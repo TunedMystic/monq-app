@@ -20,7 +20,13 @@
    <br>
   </div>
   
-  <h2>Search Results:</h2>
+	
+	{% if searchQuery %}
+	   <h2>Search Results for '{{ searchQuery }}':</h2>
+	{% else %}
+	   <h2>Search Results:</h2>
+	{% endif %}
+  
   
   {% for snippet in object_list %}
     <div style="border: 1px solid black;">
