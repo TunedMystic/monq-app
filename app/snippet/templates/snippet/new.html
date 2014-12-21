@@ -1,11 +1,21 @@
 {% extends "snippet/_base.html" %}
 {% load staticfiles %}
 
-{% block main %}
-  
-	{% include "snippet/_editor.html" %}
-	
+
+{% block editorStyles %}
+  {% include "nil/editorStyles.html" %}
 {% endblock %}
+
+
+{% block main %}
+	{% include "snippet/_editor.html" %}
+{% endblock %}
+
+
+{% block editorscripts %}
+  {% include "nil/editorScripts.html" %}
+{% endblock %}
+
 
 {% block scriptsbottom %}
 

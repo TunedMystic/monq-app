@@ -164,6 +164,16 @@ hr.fancy-hr {
   margin: 0px 0px;
 }
 
+#alertBox {
+  display: none;
+  padding-bottom: 0px;
+}
+
+#successBox {
+  display: none;
+  padding-bottom: 0px;
+}
+
 @media(max-width:450px) {
   .tagline {
     clear: both;

@@ -104,6 +104,8 @@ class UserDashboardView(LoginRequiredMixin, DetailView, ProcessFormView):
     context["recentLikedSnippets"] = usr.snippetlike_set.all().order_by("-date_liked")[:self.limit_by]
     # Get the User login details.
     context["loginDetails"] = usr.userprofile.getLoginDetailsList()
+    # Build the full url of the User's public profile (This is used if the User has no website).
+    context["profileUrl"] = self.request.build_absolute_uri(reverse("userext:profile", kwargs={"usrname": self.object.username}))
     return context
   
   def post(self, request, *args, **kwargs):

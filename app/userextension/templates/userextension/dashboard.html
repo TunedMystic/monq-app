@@ -1,139 +1,308 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>User Profile</title>
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
+{% extends 'snippet/_base.html' %}
+{% load staticfiles %}
 
-<body id="home">
-  
-  <h2>Hi {{ user.username }}!</h2>
-  
-  <p>Logged in via {{ user.userprofile.getProvider }}</p>
-  <img src="http://placehold.it/200x200&text={{ user.userprofile.getProvider }}" width="200" height="200" alt="Social Login">
-  <img src="https://sigil.cupcake.io/{{ user.username }}?inverted=1&w=216" width="216" height="216">
-  
-  <!-- Recently made Snippets. -->
-  <div>
-    <h3>Your Recent Snippets</h3>
-    {% if recentMadeSnippets %}
-       <ul>
-         {% for snippet in recentMadeSnippets %}
-         <li>
-           <p>{{ snippet.title }} - on {{ snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</p>
-           <p>{{ snippet.url_code }}</p>
-         </li>
-         {% endfor %}
-       </ul>
-    {% else %}
-      <h2>No Snippets made yet.</h2>
-    {% endif %}
-  </div>
-  
-  <!-- Recently liked Snippets. -->
-  <div>
-    <h3>Liked Snippets</h3>
-    {% if recentLikedSnippets %}
-       <ul>
-         {% for snippetLike in recentLikedSnippets %}
-         <li>
-           <p>You liked {{ snippetLike.snippet.title }} - on {{ snippetLike.date_liked|date:"SHORT_DATETIME_FORMAT" }}</p>
-         </li>
-         {% endfor %}
-       </ul>
-    {% else %}
-      <h2>No Snippets liked yet.</h2>
-    {% endif %}
-  </div>
-  
-  <!-- Login Details -->
-  <div>
-    {% if loginDetails %}
-    <h3>Login Details</h3>
-       <ul>
-         {% for chunk_ip, chunk_date in loginDetails %}
-         <li>
-           <p>IP: {{ chunk_ip }} - on {{ chunk_date|date:"SHORT_DATETIME_FORMAT" }}</p>
-         </li>
-         {% endfor %}
-       </ul>
-    {% endif %}
-  </div>
-  
-  <form id="dashboardForm" action="." method="post" novalidate="novalidate">
-    {% csrf_token %}
-    
-    <input type="hidden" id="defsniplang" data-defsniplang="{{ user.userprofile.defaultSnippetLanguage }}">
-    <input type="hidden" id="defedtheme" data-defedtheme="{{ user.userprofile.defaultEditorTheme }}">
-    
-    <p><label for="website-url">Your Website Url:</label><input type="text" id="websiteUrl" name="websiteUrl" value="{{ user.userprofile.websiteUrl }}" placeholder="ex. http://mysite.com"></p>
-    <p><label for="defaultSnippetLanguage">Default Snippet Language:</label></p>
-    <select name="defaultSnippetLanguage" id="defaultSnippetLanguage">
-      <option value="" disabled="disabled" selected="selected" style="display:none;">Language Syntax</option>
-    </select>
-    <select name="defaultEditorTheme" id="defaultEditorTheme">
-      <option value="" disabled="disabled" selected="selected" style="display:none;">Editor Theme</option>
-    </select>
-    
-    <input type="submit" id="userProfileSubmitButton" value="Save Changes"/>
-  </form>
-  
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-themelist.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-modelist.js"></script>
+
+{% block stylestop %}
+  <link rel="stylesheet" href="{% static 'userextension/css/dashboard.css' %}">
+	<link rel="stylesheet" href="{% static 'nil/css/monq/editor.css' %}">
+{% endblock %}
+
+
+{% block main %}
+  <!-- /Panel left and Panel right -->
+  <div class="row">
+		
+		<!-- Big Column 1 -->
+		<div class="col-md-6 col-sm-12 col-xs-12">
+			
+			<ul class="list-unstyled dashboard-left-ul">
+				<li>
+					
+					
+					<!-- User profile block -->
+					<ul id="user-profile-block" class="list-unstyled list-inline dashboard-top">
+						<li><img class="img-thumbnail" src="https://sigil.cupcake.io/{{ user.username }}?inverted=1&w=216" width="168" height="168"></li>
+						<li class="dashboard-list">
+							<ul class="list-unstyled dashboard-top-list">
+								<li><h2>Hi <strong>{{ user.username }}</strong>!</h2></li>
+								{% if not user.userprofile.websiteUrl %}
+									<li><h5><a id="user-website" href="{{ profileUrl }}">{{ profileUrl }}</a></h5></li>
+								{% else %}
+									<li><h5><a id="user-website" href="{{ user.userprofile.websiteUrl }}">{{ user.userprofile.websiteUrl }}</a></h5></li>
+								{% endif %}
+								<li><h5 class="text-muted"><small>joined on</small> {{ user.date_joined|date:"d F Y" }}</h5></li>
+								<li><h5 class="text-muted"><small>last login</small> {{ user.last_login|date:"d F Y" }}</h5></li>
+							</ul>
+						</li>
+					</ul> <!-- /User profile block -->
+					
+					
+				</li>
+				<li>
+					
+					<!-- Logged in via what? -->
+					<div class="well text-center user-social-details">
+						Logged in via <strong>{{ user.userprofile.getProvider }}</strong>
+						
+						{% if user.userprofile.getProvider != "Local" %}
+						  &nbsp;&nbsp;<span><i class="fa fa-{{ user.userprofile.getProvider|lower }}-square user-social-icon"></i></span>
+						{% else %}
+						  &nbsp;&nbsp;<span><i class="fa fa-square user-social-icon"></i></span>
+						{% endif %}
+					</div> <!-- /Logged in via what? -->
+					
+					
+				</li>
+				<li>
+					
+					<!-- Dashboard Form -->
+					<form id="dashboardForm" class="form-horizontal" action="." method="post" novalidate="novalidate">
+						
+						{% csrf_token %}
+						<input type="hidden" id="defsniplang" data-defsniplang="{{ user.userprofile.defaultSnippetLanguage }}">
+            <input type="hidden" id="defedtheme" data-defedtheme="{{ user.userprofile.defaultEditorTheme }}">
+						
+						<h2 class="text-center">Update your details:</h2>
+						
+						<div class="form-group">
+							<label for="websiteUrl" class="col-sm-4 control-label">Website</label>
+							<div class="col-sm-6 controls">
+								<div class="input-group">
+									<span class="input-group-addon">http://</span>
+									<input type="text" class="form-control" id="websiteUrl" placeholder="monq.cc">
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="defaultSnippetLanguage" class="col-sm-4 control-label">Default Snippet Language</label>
+							<div class="col-sm-8 controls">
+								<div class="input-group">
+									<select name="defaultSnippetLanguage" id="defaultSnippetLanguage" class="form-control">
+										<option value="" disabled="disabled" selected="selected" style="display:none;">Language Syntax</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="defaultEditorTheme" class="col-sm-4 control-label">Default Theme</label>
+							<div class="col-sm-8 controls">
+								<div class="input-group">
+									<select name="defaultEditorTheme" id="defaultEditorTheme" class="form-control">
+										<option value="" disabled="disabled" selected="selected" style="display:none;">Editor Theme</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-sm-offset-4 col-sm-10">
+							  <button type="submit" id="userProfileSubmitButton" value="Update my profile!" class="btn btn-primary">Update my profile!</button>
+							</div>
+						</div>
+						
+					</form> <!-- /Dashboard Form -->
+					
+					
+				</li>
+				
+			</ul>
+		</div> <!-- /Big Column 2 -->
+		
+		<!-- Big Column 2 -->
+		<div class="col-md-6 col-sm-12 col-xs-12">
+			
+			
+			<!-- Recent Snippets List -->
+			<div class="panel panel-default">
+				<div class="panel-heading snippet-list-heading"><h3>Recent Snippets:</h3></div>
+				<div class="panel-body">
+					<!-- Table -->
+					<table class="table table-hover table-responsive">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Title</th>
+								<th>Language</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for snippet in user.snippet_set.all %}
+							<tr>
+								{% ifequal snippet.visibility "public" %}
+									<td><span data-toggle="tooltip" data-placement="left" title="Public Snippet"><i class="fa fa-user fa-2"></i></span></td>
+								{% else %}
+									<td><span data-toggle="tooltip" data-placement="left" title="Private Snippet"><i class="fa fa-lock fa-2"></i></span></td>
+								{% endifequal %}
+								<td><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}"><strong>{{ snippet.title }}</strong></a></td>
+								<td>{{ snippet.language }}</td>
+								<td>{{ snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<div class="pull-right">
+						<a href="{% url 'userext:usersnippets' %}" class="btn btn-default">View More</a>
+					</div>
+				</div>
+			</div> <!-- Recent Snippets List -->
+			
+			
+			<!-- Recent Likes List -->
+			<div class="panel panel-default">
+				<div class="panel-heading snippet-list-heading"><h3>Recent Likes:</h3></div>
+				<div class="panel-body">
+					<!-- Table -->
+					<table class="table table-hover table-responsive">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Title</th>
+								<th>Language</th>
+								<th>Date Liked</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for snippet in user.snippetlike_set.all %}
+							<tr>
+								{% ifequal snippet.snippet.visibility "public" %}
+									<td><span data-toggle="tooltip" data-placement="left" title="Public Snippet"><i class="fa fa-user fa-2"></i></span></td>
+								{% else %}
+									<td><span data-toggle="tooltip" data-placement="left" title="Private Snippet"><i class="fa fa-lock fa-2"></i></span></td>
+								{% endifequal %}
+								<td><a href="{% url 'snippet:detailSnippet' urlcode=snippet.snippet.url_code %}"><strong>{{ snippet.snippet.title }}</strong></a></td>
+								<td>{{ snippet.snippet.language }}</td>
+								<td>{{ snippet.snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<div class="pull-right">
+						<a href="{% url 'userext:usersnippetlikes' %}" class="btn btn-default">View More</a>
+					</div>
+				</div>
+			</div> <!-- Recent Likes List -->
+			
+		
+		</div> <!-- /Big Column 2 -->
+		
+		
+	</div> <!-- /Panel left and Panel right -->
+	
+	
+	
+	<!-- Login Details row-->
+	<div class="row loginDetailsRow">
+		
+		<div class="col-md-2 col-sm-2"></div>
+		
+		<div class="col-md-8 col-sm-8 col-xs-12">
+			
+			<!-- Login Details List -->
+			<div class="panel panel-warning">
+				<div class="panel-heading login-details-heading"><h3>Login Details:</h3></div>
+				<div class="panel-body">
+					<!-- Table -->
+					<table class="table table-hover table-responsive">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>IP Address</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for chunk_ip, chunk_date in loginDetails %}
+							<tr>
+								<td><span data-toggle="tooltip" data-placement="top" title="IP Address Information"><i class="fa fa-dot-circle-o fa-2"></i></span></td>
+								<td>{{ chunk_ip }}</td>
+								<td>{{ chunk_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div> <!-- Login Details List -->
+			
+		</div>
+		
+		<div class="col-md-2 col-sm-2"></div>
+		
+	</div> <!-- /Login Details row-->
+	
+{% endblock %}
+
+
+{% block editorscripts %}
+  {% include "nil/editorScripts.html" %}
+{% endblock %}
+
+
+{% block scriptsbottom %}
+
   <script type="text/javascript">
-  
-    function editorModes() {
-      var modes = ace.require("ace/ext/modelist");
-      var themes = ace.require("ace/ext/themelist");
-      
-      // Build 'Editor Mode' options.
-      _.each(modes.modes, function(element, index) {
-        $("#defaultSnippetLanguage").append($("<option/>").attr({"value": element.name}).text(element.caption));
-      });
-      
-      // Build 'Editor Theme' options.
-      _.each(themes.themes, function(element, index) {
-        $("#defaultEditorTheme").append($("<option/>").attr({"value": element.name}).text(element.caption));
-      });
-    }
-    
-    function postDashboardForm() {
-      $.ajax({
-        url: "/me/",
-        headers: {
-          "X-CSRFToken": $.cookie("csrftoken")
-        },
-        type: "post",
-        dataType: "json",
-        data: {
-          "websiteUrl": $("#websiteUrl").val(),
-          "defaultSnippetLanguage": $("#defaultSnippetLanguage").val(),
-          "defaultEditorTheme": $("#defaultEditorTheme").val(),
-        },
-        success: function(data, status, jqXHR) {
-          console.log("Success!");
-          window.sdata = data;
-        },
-        error: function(data, status, jqXHR) {
-          console.log("Success!");
-          window.sdata = data;
-        }
-      });
-    }
-    
-    function s() {
-      console.log(window.sdata.responseText);
-    }
-    
+		$(document).ready(function() {
+			$('[data-toggle="tooltip"]').tooltip()
+		});
+	</script>
+	
+	<script type="text/javascript">
+		// Post Dashboard form with Ajax.
     $(document).ready(function() {
-      
+      function editorModes() {
+				var modes = ace.require("ace/ext/modelist");
+				var themes = ace.require("ace/ext/themelist");
+				
+				// Build 'Editor Mode' options.
+				_.each(modes.modes, function(element, index) {
+					$("#defaultSnippetLanguage").append($("<option/>").attr({"value": element.name}).text(element.caption));
+				});
+				
+				// Build 'Editor Theme' options.
+				_.each(themes.themes, function(element, index) {
+					$("#defaultEditorTheme").append($("<option/>").attr({"value": element.name}).text(element.caption));
+				});
+			}
+			
+			function postDashboardForm() {
+				$.ajax({
+					url: "/me/",
+					headers: {
+						"X-CSRFToken": $.cookie("csrftoken")
+					},
+					type: "post",
+					dataType: "json",
+					data: {
+						"websiteUrl": $("#websiteUrl").val(),
+						"defaultSnippetLanguage": $("#defaultSnippetLanguage").val(),
+						"defaultEditorTheme": $("#defaultEditorTheme").val(),
+					},
+					success: function(data, status, jqXHR) {
+						//console.log("Success!");
+						//window.sdata = data;
+						
+						utils.comboSuccess("Successfully updated your profile!");
+						
+						// Change the user's url (top of page) to the url in the form.
+						if($("#websiteUrl").val() != "") {
+							$("#user-website").attr("href", $("#websiteUrl").val());
+						  $("#user-website").text($("#websiteUrl").val());
+						}
+					},
+					error: function(data, status, jqXHR) {
+						//console.log("Error!");
+						//window.sdata = data;
+						utils.comboAlert(data);
+					}
+				});
+			}
+			
+			function s() {
+				console.log(window.sdata.responseText);
+			}
+			
       editorModes();
       
       // If 'defaultSnippetlanguage' exists, then get it.
@@ -151,18 +320,27 @@
       if($("#defaultEditorTheme").val() == null)
         // If incorrect editor theme, then revert to default "" option.
         $("#defaultEditorTheme").val("");
-    });
-    
-    // Post Dashboard form with Ajax.
-    $(document).ready(function() {
-      
-      $("#dashboardForm").submit(function(e) {
+			
+			
+			// Post Dashboard Form.
+			$("#dashboardForm").submit(function(e) {
         e.preventDefault();
         postDashboardForm();
       });
+			
+    });
+    
+    
+		// Initialize 'Chosen' Selectboxes.
+    $(document).ready(function() {
+      
+			// Initialize 'Chosen' selectboxes.
+			var noResultsTxt = "Nothing to show.";
+			$("#defaultSnippetLanguage").chosen({no_results_text: noResultsTxt});
+			$("#defaultEditorTheme").chosen({no_results_text: noResultsTxt});
       
     });
     
   </script>
-</body>
-</html>
+	
+{% endblock %}

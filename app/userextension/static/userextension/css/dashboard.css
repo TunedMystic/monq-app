@@ -1,0 +1,122 @@
+
+.dashboard-top {
+  
+}
+
+.dashboard-top .img-thumbnail {
+  background-color: #222;
+}
+
+.dashboard-list {
+  vertical-align: top;
+}
+
+.dashboard-list ul {
+  padding-left: 20px;
+}
+
+.dashboard-top-list {
+  
+}
+
+.dashboard-top-list h2 {
+  margin-top: 0px;
+  margin-bottom: 30px;
+}
+
+.dashboard-top-list h5 {
+  font-size: 15px;
+}
+
+.dashboard-top-list .small {
+  font-size: 80%;
+}
+
+.snippet-list-heading h3 {
+  margin: 0px inherit;
+}
+
+.fa-2 {
+  font-size: 18px;
+}
+
+.fa-user {
+  color: #9D9AAF;
+}
+
+#user-profile-block {
+  
+}
+
+.user-social-icon {
+  font-size: 30px;
+  vertical-align: middle;
+}
+
+.user-social-details {
+  margin: 40px 0px;
+}
+
+/* Dashboard form stuff. */
+#userProfileSubmitButton {
+  
+}
+
+.loginDetailsRow {
+  
+}
+
+.login-details-heading  h3{
+  margin: 0px inherit;
+}
+
+.loginDetailsRow {
+  /*padding-top: 40px;*/
+}
+
+#dashboardForm {
+  margin-bottom: 40px;
+}
+
+#dashboardForm h2 {
+  margin-bottom: 20px;
+  /*padding-top: 10px;*/
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1200px) {
+
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+
+}
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (max-width : 480px) {
+
+}
+
+/* Custom, iPhone Retina */ 
+@media only screen and (max-width : 320px) {
+
+}
+
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 991px) {
+  #dashboardForm {
+    padding: 0px 100px;
+  }
+  
+  #user-profile-block {
+    text-align: center;
+  }
+}
+

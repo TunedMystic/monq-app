@@ -6,17 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
-
+     
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{% static 'nil/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'nil/css/bootstrap-toggle.min.css' %}">
-    <link rel="stylesheet" href="{% static 'nil/css/bootstrap-tokenfield.min.css' %}">
     <link rel="stylesheet" href="{% static 'nil/css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'nil/css/hover-min.css' %}">
     <link rel="stylesheet" href="{% static 'nil/css/chosen.min.css' %}">
     <link rel="stylesheet" href="{% static 'nil/css/bootstrap-chosen.css' %}">
+    {% block editorStyles %}{% endblock %}
     <link rel="stylesheet" href="{% static 'nil/css/monq/base.css' %}">
-    <link rel="stylesheet" href="{% static 'nil/css/monq/editor.css' %}">
     {% block stylestop %}{% endblock %}
     {% block scriptstop %}{% endblock %}
 
@@ -110,6 +108,27 @@
     </nav>
     <!-- /Sticky Navbar -->
     
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div id="alertBox" class="alert alert-danger alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-fdismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <div id="alertBoxInner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div id="successBox" class="alert alert-info alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-fdismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <div id="successBoxInner"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     
     <!-- Page Main -->
     <div id="page-main">
@@ -165,20 +184,17 @@
       
     </footer>
     <!-- /Page Footer -->
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    
+    <!-- jQuery and other necessary scripts -->
     <script type="text/javascript" src="{% static 'nil/js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'nil/js/jquery.cookie.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'nil/js/underscore-min.js' %}"></script>
     <script type="application/octet-stream" src="{% static 'nil/js/underscore-min.map' %}"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script type="text/javascript" src="{% static 'nil/js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'nil/js/bootstrap-toggle.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'nil/js/bootstrap-tokenfield.min.js' %}"></script>
-    <script type="application/octet-stream" src="{% static 'nil/js/bootstrap-toggle.min.js.map' %}"></script>
     <script type="text/javascript" src="{% static 'nil/js/chosen.jquery.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'nil/js/ace/ace.js' %}"></script>
-    <script type="text/javascript" src="{% static 'nil/js/ace/ext-modelist.js' %}"></script>
-    <script type="text/javascript" src="{% static 'nil/js/ace/ext-themelist.js' %}"></script>
+    
+    <!-- Ace Editor specific scripts -->
+    {% block editorscripts %}{% endblock %}
     
     <script type="text/javascript" src="{% static 'nil/js/monq/_base.js' %}"></script>
     

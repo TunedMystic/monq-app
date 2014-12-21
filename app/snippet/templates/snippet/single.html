@@ -2,9 +2,19 @@
 {% load staticfiles %}
 
 
+{% block editorStyles %}
+  {% include "nil/editorStyles.html" %}
+{% endblock %}
+
+
 {% block main %}
   <h4 id="snippet-author">Posted by: {{ object.author.username }} on {{ object.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</h4>
 	{% include "snippet/_editor.html" %}
+{% endblock %}
+
+
+{% block editorscripts %}
+  {% include "nil/editorScripts.html" %}
 {% endblock %}
 
 
