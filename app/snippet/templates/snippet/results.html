@@ -1,24 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Search Snippets</title>
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
+{% extends 'snippet/_base.html' %}
+{% load staticfiles %}
 
-<body id="home">
-  
-  <div>
-   <form action="{% url 'snippet:searchSnippet' %}" method="POST">
-     {% csrf_token %}
-    <input type="text" name="searchQ">
-    <input type="submit" value="Search Snippets">
-   </form>
-    
-   <br>
-  </div>
+
+{% block stylestop %}
+  <link rel="stylesheet" href="{% static 'snippet/css/results.css' %}">
+	<link rel="stylesheet" href="{% static 'nil/css/default.min.css' %}">
+	<link rel="stylesheet" href="{% static 'nil/css/solarized_dark.css' %}">
+{% endblock %}
+
+
+{% block main %}
   
 	
 	{% if searchQuery %}
@@ -34,6 +25,38 @@
     </div>
     <br>
   {% endfor %}
+	
+	<div class="row">
+		<div class="ccol-md-1"></div>
+		
+		<div class="col-md-12">
+			<ul class="list-unstyled results-list">
+				{% for snippet in object_list %}
+				<li class="col-md-4 results-object-outer">
+					
+					
+					<div class="results-object">
+						{% if snippet.author %}
+						<p class="rtop"><span class="title">{{ snippet.title }}</span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippet.author.username %}">{{ snippet.author }}</a></span></p>
+						{% else %}
+						<p class="rtop"><span class="title">{{ snippet.title }}</span> by <span class="author">Guest</span></p>
+						{% endif %}
+						<div class="results-object-preview">
+							<pre class="{{ snippet.language }}">
+{{ snippet.preview|escape }}
+							</pre>
+						</div> <!-- /.results-object-preview -->
+						<p class="rbottom"><small class="text-muted">{{ snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</small></p>
+					</div>
+					
+					
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		
+		<div class="ccol-md-1"></div>
+	</div>
   
   {% if is_paginated %}
     {% if page_obj.has_previous %}
@@ -47,15 +70,18 @@
     {% endif %}
   {% endif %}
   
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript">
-    
-    $(document).ready(function() {
-      //do something here.
-    });
-    
-  </script>
-</body>
-</html>
+{% endblock %}
+
+
+{% block scriptsbottom %}
+<script type="text/javascript" src="{% static 'nil/js/highlight.min.js' %}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$('div pre').each(function(i, block) {
+			hljs.highlightBlock(block);
+		});
+		
+	});
+</script>
+{% endblock %}

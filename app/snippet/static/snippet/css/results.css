@@ -1,0 +1,35 @@
+
+.results-object-outer {
+  
+}
+
+.result-object {
+  
+}
+
+.results-object p {
+  font-size: 16px;
+}
+
+.results-object .author {
+  font-weight: bold;
+}
+
+.results-object .rtop {
+  margin-bottom: 4px;
+  padding-left: 2px;
+}
+
+.results-object .rbottom {
+  /*margin-bottom: 4px;*/
+  padding-left: 2px;
+}
+
+.results-object-preview {
+  
+}
+
+.results-object-preview pre{
+  height: 160px;
+  overflow: hidden;
+}
