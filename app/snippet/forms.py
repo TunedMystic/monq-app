@@ -29,7 +29,7 @@ class SnippetForm(forms.ModelForm):
     Checks is the title is an empty string.
     If it is, then change it to 'Untitled'.
     """
-    data = self.cleaned_data.get("content", None)
+    data = self.cleaned_data.get("title", None)
     if not data:
       data = "Untitled"
     return data

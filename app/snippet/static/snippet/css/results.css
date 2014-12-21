@@ -66,3 +66,14 @@
   margin-bottom: 40px;
 }
 
+/* Snippet password form */
+.passwordButton {
+  margin-left: 10px;
+}
+
+@media(max-width:767px){
+  .passwordButton {
+    margin-left: 0px;
+    margin-top: 10px;
+  }
+}
