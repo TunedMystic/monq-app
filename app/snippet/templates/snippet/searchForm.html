@@ -1,36 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Search Some Snippets</title>
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
+{% extends 'snippet/_base.html' %}
+{% load staticfiles %}
 
-<body id="home">
-  
-  <h2>Search some snippets here!</h2>
-  
-  <div>
-   <form action="{% url 'snippet:searchSnippet' %}" method="POST">
-    {% csrf_token %}
-    <input type="text" name="searchQ">
-    <input type="submit" value="Search Snippets">
-   </form>
-    
-   <br>
-  </div>
-  
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript">
-    
-    $(document).ready(function() {
-      //do something here.
-    });
-    
-  </script>
-</body>
-</html>
+
+{% block stylestop %}
+  <link rel="stylesheet" href="{% static 'snippet/css/results.css' %}">
+{% endblock %}
+
+
+{% block main %}
+  <div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+			
+			<div class="searchFormDiv">
+				<h2><strong>Search some snippets here!</strong></h2>
+				<form action="{% url 'snippet:searchSnippet' %}" method="POST" class="form-inline">
+				 {% csrf_token %}
+				 
+					<div class="input-group input-group-lg">
+						<input type="text" class="form-control" placeholder="Messages from Area 51..." name="searchQ">
+						<span class="input-group-addon">
+							<i class="fa fa-search"></i>
+						</span>
+					</div>
+					
+				</form>
+				 
+				<br>
+		 </div>
+			
+		</div>
+	</div>
+{% endblock %}
+
+
+{% block scriptsbottom %}
+{% endblock %}

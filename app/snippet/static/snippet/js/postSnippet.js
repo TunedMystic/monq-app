@@ -35,7 +35,7 @@ $(document).ready(function() {
         ////window.sdata = data;
         ////console.log(window.sdata);
         // Redirect to new snippet.
-        window.location = sdata.next;
+        window.location = data.next;
       },
       error: function(data, status, jqXHR) {
         ////console.log("Error!\n\n");

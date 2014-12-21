@@ -242,7 +242,7 @@ class SnippetListView(qSession, ListView):
   """
   model = Snippet
   template_name = "snippet/all.html"
-  paginate_by = 4
+  paginate_by = 6
   page_kwarg = "pg"
   
   def get_queryset(self):
@@ -263,7 +263,7 @@ class SnippetSearchView(ListView, ProcessFormView):
   """
   model = Snippet
   template_name = "snippet/results.html"
-  paginate_by = 3
+  paginate_by = 6
   page_kwarg = "pg"
   
   def dispatch(self, request, *args, **kwargs):

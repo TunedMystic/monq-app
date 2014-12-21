@@ -1,6 +1,10 @@
 
+.results-list {
+  overflow: auto;
+}
+
 .results-object-outer {
-  
+  padding-top: 20px;
 }
 
 .result-object {
@@ -23,6 +27,7 @@
 .results-object .rbottom {
   /*margin-bottom: 4px;*/
   padding-left: 2px;
+  margin-top: -6px;
 }
 
 .results-object-preview {
@@ -33,3 +38,31 @@
   height: 160px;
   overflow: hidden;
 }
+
+.paginator-block {
+  padding-top: 24px;
+  margin-bottom: 4px;
+}
+
+.paginator-block a {
+  font-size: 13px;
+}
+
+.paginator-block .previous {
+  margin-right: 6px;
+}
+
+.paginator-block .next {
+  margin-left: 6px;
+}
+
+/* Search Form page */
+.searchFormDiv {
+  padding-top: 40px;
+  padding-bottom: 240px;
+}
+
+.searchFormDiv h2 {
+  margin-bottom: 40px;
+}
+

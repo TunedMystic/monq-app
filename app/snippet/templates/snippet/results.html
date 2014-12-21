@@ -4,7 +4,6 @@
 
 {% block stylestop %}
   <link rel="stylesheet" href="{% static 'snippet/css/results.css' %}">
-	<link rel="stylesheet" href="{% static 'nil/css/default.min.css' %}">
 	<link rel="stylesheet" href="{% static 'nil/css/solarized_dark.css' %}">
 {% endblock %}
 
@@ -13,18 +12,10 @@
   
 	
 	{% if searchQuery %}
-	   <h2>Search Results for '{{ searchQuery }}':</h2>
+	   <h2><strong>Search Results for '{{ searchQuery }}':</strong></h2>
 	{% else %}
-	   <h2>Search Results:</h2>
+	   <h2><strong>Search Results:</strong></h2>
 	{% endif %}
-  
-  
-  {% for snippet in object_list %}
-    <div style="border: 1px solid black;">
-      <a href="{% url 'snippet:detailSnippet' snippet.url_code %}"><p>{{ snippet.title }}</p></a>
-    </div>
-    <br>
-  {% endfor %}
 	
 	<div class="row">
 		<div class="ccol-md-1"></div>
@@ -37,9 +28,9 @@
 					
 					<div class="results-object">
 						{% if snippet.author %}
-						<p class="rtop"><span class="title">{{ snippet.title }}</span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippet.author.username %}">{{ snippet.author }}</a></span></p>
+						<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.title }}</a></span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippet.author.username %}">{{ snippet.author }}</a></span></p>
 						{% else %}
-						<p class="rtop"><span class="title">{{ snippet.title }}</span> by <span class="author">Guest</span></p>
+						<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.title }}</a></span> by <span class="author">Guest</span></p>
 						{% endif %}
 						<div class="results-object-preview">
 							<pre class="{{ snippet.language }}">
@@ -58,19 +49,26 @@
 		<div class="ccol-md-1"></div>
 	</div>
   
-  {% if is_paginated %}
-    {% if page_obj.has_previous %}
-      <a href="{% url 'snippet:searchSnippet' pg=page_obj.previous_page_number %}">Previous</a>
-    {% endif %}
-    <span>
-      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-    </span>
-    {% if page_obj.has_next %}
-      <a href="{% url 'snippet:searchSnippet' pg=page_obj.next_page_number %}">Next</a>
-    {% endif %}
-  {% endif %}
+	
+	<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12 text-center paginator-block">
+			{% if is_paginated %}
+			{% if page_obj.has_previous %}
+				<a class="label label-default previous" href="{% url 'snippet:searchSnippet' pg=page_obj.previous_page_number %}">Prev</a>
+			{% endif %}
+			<span>
+				Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong>
+			</span>
+			{% if page_obj.has_next %}
+				<a class="label label-default next" href="{% url 'snippet:searchSnippet' pg=page_obj.next_page_number %}">Next</a>
+			{% endif %}
+		{% endif %}
+	</div>
+</div>
+
   
 {% endblock %}
+
 
 
 {% block scriptsbottom %}
