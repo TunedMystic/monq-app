@@ -5,12 +5,35 @@
 {% block editorStyles %}
   {% include "nil/editorStyles.html" %}
 	<link rel="stylesheet" href="{% static 'snippet/css/single.css' %}">
+	<style>
+		.share-list {
+			margin-top: 30px;
+		}
+		
+		.share {
+			display: inline;
+			font-size: 30px;
+			margin: 0px 10px;
+		}
+		
+		.share.share-twitter a {
+			color: #4099FF;
+		}
+		
+		.share.share-facebook a{
+			color: #3B5998;
+		}
+		
+		.share.share-google a{
+			color: #dd4b39;
+		}
+	</style>
 {% endblock %}
 
 
 {% block main %}
   <div class="row">
-		
+			
 			<div class="col-md-6 col-sm-6 col-xs-12">
 				<h4 id="snippet-author">Posted by:
 				<strong>
@@ -66,6 +89,23 @@
 	</div>
 	
 	{% include "snippet/_editor.html" %}
+	
+	{% if viewingSnippet %}
+	<div class="row">
+		<div class="col-ms-12 col-sm-12 col-xs-12">
+			<ul class="list-unstyled text-center share-list">
+				<li>
+					<h3><strong>Share this!</strong></h3>
+				</li>
+				<li>
+					<div class="share share-twitter"><a href="#" buttonInfo="Post a tweet on Twitter!"><span><i class="fa fa-twitter-square buzz-out"></i></span></a></div>
+					<div class="share share-facebook"><a href="#" buttonInfo="Post on Facebook!"><span><i class="fa fa-facebook-square buzz-out"></i></span></a></div>
+					<div class="share share-google"><a href="#"><span><i class="fa fa-google-plus-square buzz-out"></i></span></a></div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	{% endif %}
 {% endblock %}
 
 
@@ -76,6 +116,7 @@
 
 {% block scriptsbottom %}
   <script type="text/javascript" src="{% static 'nil/js/monq/_editor.js' %}"></script>
+	<script type="text/javascript" src="{% static 'nil/js/linkPopup.js' %}"></script>
 	
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -126,6 +167,41 @@
 				$("#snippet-language").trigger("change");
 			});
 		</script>
+	{% endif %}
+	
+	
+	{% if viewingSnippet %}
+	<input id="twitter-tagline" type="hidden" data-twitter-tagline="Check out this snippet: {{ object.title }} | #monq.cc">
+	<input id="page-path" type="hidden" data-path="{{ path }}">
+	<script>
+		$(document).ready(function() {
+			var thisPage = $("#page-path").data("path");
+		  var shareUrls = {
+			"facebook"  : "https://www.facebook.com/sharer/sharer.php?u=", 
+			"twitter"   : /*"http://twitter.com/home?status="*/
+										"http://twitter.com/share?text=" + encodeURIComponent($("#twitter-tagline").data("twitter-tagline")) + "&url=" + thisPage,
+			"google": "https://plus.google.com/share?url=" + thisPage
+	    }
+			window.ss = shareUrls;
+			
+			// Set up Meta tag information.
+			$("#m_fb_url").attr("content", thisPage);
+			$("#m_fb_image").attr("content", document.location.origin + "/static/nil/monqBanner.png");
+			$("#m_tw_image").attr("content", document.location.origin + "/static/nil/monqBanner.png");
+			
+			// Set up social icons.
+			$(".share-twitter a").attr("href", shareUrls["twitter"] );
+			$(".share-google a").attr("href", shareUrls["google"] );
+      $(".share-facebook a").attr("href", shareUrls["facebook"] + thisPage + "&t=" + document.title);
+			
+			/// Default action for all HTML elements with the class "popup"
+			$(".share a").click(function(e) {
+				 e.preventDefault();
+				 e.stopPropagation();
+				 popupCenter( $(this).attr("href"), $(this).attr("buttonInfo") );
+			});
+		});
+	</script>
 	{% endif %}
 	
 	

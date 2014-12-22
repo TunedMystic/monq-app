@@ -13,11 +13,53 @@
 			font-size: 20px;
 		}
 	</style>
+	<style>
+		.default-info h2 {
+			margin-top: 30px;
+		}
+		.info-heading p {
+			font-size: 18px;
+			line-height: 28px;
+		}
+	</style>
 {% endblock %}
 
 
 {% block main %}
 	{% include "snippet/_editor.html" %}
+	
+	<hr>
+	
+	<div class="row">
+		<div class="col-md-2 col-sm-2"></div>
+		
+		<div class="col-md-8 col-sm-8 col-xs-12 default-info">
+			<ul class="list-unstyled">
+				<li class="info-heading">
+					<h2><strong>An awesome online code snippet web app!</strong></h2>
+					<p class="text-muted"><strong>monq</strong> is a small and simple web app to make and share code/text snippets online.
+					You can make code snippets, share them, and save them for later.
+					Code snippets are the future. Easy as Pie!</p>
+				</li>
+				<li class="info-heading">
+					<h2><strong>You'll want to keep browsing!</strong></h2>
+					<p class="text-muted">We have a bunch of snippets already available at monq.
+					Love making short one-liners or fancy for-loops? We've got you covered!
+					Browse through our recent snippets or search for them!</p>
+				</li>
+				<li class="info-heading">
+					<h2><strong>Are you a code Jedi?</strong></h2>
+					<p class="text-muted">Lets face the facts. You don't want to scroll through miles of documentation for that 'ONE' thing you were looking for.
+					What's even worse is when you have to find that 'ONE' thing again!
+					Having a place to store those little ideas makes you more productive.
+					You'll be on the path to becoming a code Jedi! </p>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="col-md-2 col-sm-2"></div>
+	</div>
+	
 {% endblock %}
 
 

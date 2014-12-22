@@ -5,6 +5,28 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Content Meta Tags -->
+    <meta id="m_title" name="title" content="Monq is a small and simple web app to make and share code/text snippets online. You can make code snippets, share them, and save them for later. Code snippets are the future. Easy as Pie!">
+
+    <!-- Twitter Card Meta tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@sandcoder">
+    <meta name="twitter:title" content="Monq - Code Snippets with green tea!">
+    <meta name="twitter:description" content="Monq is a small and simple web app to make and share code/text snippets online. You can make code snippets, share them, and save them for later. Code snippets are the future. Easy as Pie!">
+    <meta id="m_tw_image" name="twitter:image:src" content="{% static 'nil/img/monqBanner.png' %}">
+
+    <!-- Facebook Graph Meta tags -->
+    <meta id="m_fb_title" property="og:title" content="Monq - Code Snippets with green tea!" />
+    <meta id="m_fb_type" property="og:type" content="website" />
+    <meta id="m_fb_url" property="og:url" content="" />
+    <meta id="m_fb_image" property="og:image" content="http://localhost:8888/static/nil/img/logo.png" />
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="600">
+    <meta property="og:image:height" content="314">
+    <meta id="m_fb_descr" property="og:description" content="Monq is a small and simple web app to make and share code/text snippets online. You can make code snippets, share them, and save them for later. Code snippets are the future. Easy as Pie!"/>
+
+    
     <title>{% block title %}{% endblock %}</title>
      
     <!-- Bootstrap -->
@@ -49,8 +71,8 @@
         <div class="collapse navbar-collapse" id="page-header-dropdown">
           <ul class="nav navbar-nav navbar-right topNavLinks">
             <li><h3><strong><a class="monq-light" href="{% url 'snippet:index' %}">Home</a></strong></h3></li>
-            <li><h3><strong><a class="monq-light" href="/">About</a></strong></h3></li>
-            <li><h3><strong><a class="monq-light" href="/">FAQ</a></strong></h3></li>
+            <li><h3><strong><a class="monq-light" href="{% url 'nil:about' %}">About</a></strong></h3></li>
+            <li><h3><strong><a class="monq-light" href="{% url 'nil:about' %}#faq">FAQ</a></strong></h3></li>
           </ul>
         </div> <!--/.navbar-collapse -->
         
@@ -147,9 +169,9 @@
         <div class="row">
           <div class="md-col-12 text-center">
             <ul class="list-inline footer-links">
-              <li><a class="monq-verylight" href="#"><h4><strong>Home</strong></h4></a></li>
-              <li><a class="monq-verylight" href="#"><h4><strong>About</strong></h4></a></li>
-              <li><a class="monq-verylight" href="#"><h4><strong>FAQ</strong></h4></a></li>
+              <li><a class="monq-verylight" href="{% url 'snippet:index' %}"><h4><strong>Home</strong></h4></a></li>
+              <li><a class="monq-verylight" href="{% url 'nil:about' %}"><h4><strong>About</strong></h4></a></li>
+              <li><a class="monq-verylight" href="{% url 'nil:about' %}#faq"><h4><strong>FAQ</strong></h4></a></li>
               <li><a class="monq-verylight" href="#"><h4><strong>Contact</strong></h4></a></li>
             </ul>
           </div>

@@ -185,6 +185,7 @@ class SnippetDetailView(DetailView, ProcessFormView):
       context["alreadyLiked"] = self.request.user.snippetlike_set.filter( \
                                 snippetextras__snippet__id = context["object"].id).exists()
     context["viewingSnippet"] = True
+    context["path"] = self.request.build_absolute_uri(reverse("snippet:detailSnippet", kwargs = {"urlcode": self.object.url_code}))
     return context
   
   def get_object(self):

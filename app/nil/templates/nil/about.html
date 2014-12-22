@@ -2,15 +2,33 @@
 
 {% block stylestop %}
 <style>
-  .info-heading h4 {
-    line-height: 1.4em;
+  
+  #faq {
+    
   }
   
-  .question li h4 a {
+  .about-faq {
+    margin: 35px 0px;
+  }
+  
+  .info-heading p, .question p {
+    font-size: 18px;
+		line-height: 28px;
+  }
+  
+  .top-question {
+    margin-top: 20px !important;
+  }
+  
+  .question {
+    margin-top: 60px;
+  }
+  
+  .question li p a {
     font-weight: bold;
   }
   
-  .question li h4 span {
+  .question li p span {
     font-size: 90%;
   }
 </style>
@@ -24,73 +42,75 @@
   <div class="col-md-8 col-sm-8 col-xs-12">
     <ul class="list-unstyled">
       
-      <li class="info-heading">
+      <li class="info-heading about">
         <h1>ABOUT</h1>
-        <h4 class="text-muted"><strong>monq</strong> is a simple web app to make snippet writing easy.
+        <p class="text-muted"><strong>monq</strong> is a simple web app to make snippet writing easy.
         It is designed and implemented by <a href="http://twitter.com/sandcoder">@sandcoder</a> because he
-        felt that writing code snippets should be awesome :)</h4>
+        felt that writing code snippets should be awesome :)</p>
       </li>
       
-      <li class="info-heading">
+      <hr class="about-faq">
+      
+      <li id="faq" class="info-heading">
         <h1>FAQ</h1>
       </li>
       
-      <li class="question">
-        <h3>What does this site do?</h3>
-        <h4 class="text-muted">This website allows people (like you or me) to create and store Snippets of code (or any text really).</h4>
+      <li class="question top-question">
+        <h3><strong>What does this site do?</strong></h3>
+        <p class="text-muted">This website allows people (like you or me) to create and store Snippets of code (or any text really).</p>
       </li>
       
       <li class="question">
-        <h3>Isn't this just a pastebin?</h3>
-        <h4 class="text-muted">Well yea, but it aims to make the whole <em>pastebin</em> experience a bit more pleasant.</h4>
+        <h3><strong>Isn't this just a pastebin?</strong></h3>
+        <p class="text-muted">Well yea, but it aims to make the whole <em>pastebin</em> experience a bit more pleasant.</p>
       </li>
       
       <li class="question">
-        <h3>What languages/syntax do you support?</h3>
-        <h4 class="text-muted">Because <strong>monq</strong> uses the wonderful Ace Editor, any language supported by Ace will be available here (NOTE: We may limit the list of supported languages in the future, so just watch out for those changes).</h4>
+        <h3><strong>What languages/syntax do you support?</strong></h3>
+        <p class="text-muted">Because <strong>monq</strong> uses the wonderful Ace Editor, any language supported by Ace will be available here (NOTE: We may limit the list of supported languages in the future, so just watch out for those changes).</p>
       </li>
       
       <li class="question">
-        <h3>How can I make an account?</h3>
-        <h4 class="text-muted">Just go < here >. We currently support social logins for now. </h4>
+        <h3><strong>How can I make an account?</strong></h3>
+        <p class="text-muted">Just go <a href="{% url 'userext:login' %}">here</a>. We currently support social logins for now. </p>
       </li>
       
       <li class="question">
-        <h3>What is social login?</h3>
-        <h4 class="text-muted">Social login is when you use your login information from a social network (Facebook, Twitter) to make an account on an external website. If you have an account on our supported social networks, then you can make an account here!</h4>
+        <h3><strong>What is social login?</strong></h3>
+        <p class="text-muted">Social login is when you use your login information from a social network (Facebook, Twitter) to make an account on an external website. If you have an account on our supported social networks, then you can make an account here!</p>
       </li>
       
       <li class="question">
-        <h3>I have multiple social accounts. Can I link them into one account?</h3>
-        <h4 class="text-muted">Nope. Only one account per social account (for now at least).</h4>
+        <h3><strong>I have multiple social accounts. Can I link them into one account?</strong></h3>
+        <p class="text-muted">Nope. Only one account per social account (for now at least).</p>
       </li>
       
       <li class="question">
-        <h3>What social networks can I log in from?</h3>
-        <h4 class="text-muted">We currently support Twitter, Facebook, and Google.</h4>
+        <h3><strong>What social networks can I log in from?</strong></h3>
+        <p class="text-muted">We currently support Twitter, Facebook, and Google.</p>
       </li>
       
       <li class="question">
-        <h3>Can I trust this site?</h3>
-        <h4 class="text-muted">Of course!.....can I trust you?</h4>
+        <h3><strong>Can I trust this site?</strong></h3>
+        <p class="text-muted">Of course!.....can I trust you?</p>
       </li>
       
       <li class="question">
-        <h3>What technologies did you use to make this web app?</h3>
+        <h3><strong>What technologies are used to make this web app?</strong></h3>
         <ul class="list-unstyled tech-list">
-          <li><h4 class="text-muted"><a href="http://www.djangoproject.com/">Django</a><span> - The awesome Python web framework.</span></h4></li>
-          <li><h4 class="text-muted"><a href="http://ace.c9.io/">Ace Editor</a><span> - Embeddable Javascript code editor.</span></h4></li>
-          <li><h4 class="text-muted"><a href="http://getbootstrap.com/">Twitter Bootstrap</a><span> - Great frontend framework for your app.</span></h4></li>
-          <li><h4 class="text-muted"><a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a><span> - Wide selection of great font icons.</span></h4></li>
-          <li><h4 class="text-muted"><a href="http://highlightjs.org/">highlight.js</a><span> - Syntax highlighting done right.</span></h4></li>
-          <li><h4 class="text-muted"><a href="http://underscorejs.org/">underscore</a><span> - Handy collection of functions.</span></h4></li>
-          <li><h4 class="text-muted"><a href="http://jquery.com/">jQuery</a><span> - always</span></h4></li>
+          <li><p class="text-muted"><a href="http://www.djangoproject.com/">Django</a><span> - The awesome Python web framework.</span></p></li>
+          <li><p class="text-muted"><a href="http://ace.c9.io/">Ace Editor</a><span> - Embeddable Javascript code editor.</span></p></li>
+          <li><p class="text-muted"><a href="http://getbootstrap.com/">Twitter Bootstrap</a><span> - Great frontend framework for your app.</span></p></li>
+          <li><p class="text-muted"><a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a><span> - Wide selection of great font icons.</span></p></li>
+          <li><p class="text-muted"><a href="http://highlightjs.org/">highlight.js</a><span> - Syntax highlighting done right.</span></p></li>
+          <li><p class="text-muted"><a href="http://underscorejs.org/">underscore</a><span> - Handy collection of functions.</span></p></li>
+          <li><p class="text-muted"><a href="http://jquery.com/">jQuery</a><span> - always</span></p></li>
         </ul>
       </li>
       
       <li class="question">
-        <h3></h3>
-        <h4 class="text-muted"></h4>
+        <h3><strong></strong></h3>
+        <p class="text-muted"></p>
       </li>
       
     </ul>

@@ -128,7 +128,7 @@ SOCIAL_AUTH_TWITTER_SECRET = "1rBrH6v2mzcdRrDzXhojr4dbKLLKI7yX5qZEtN9zs6bvwsMoDB
 
 
 # Django-Debug-Toolbar Settings
-DDJT = False
+DDJT = True
 if DEBUG and DDJT:
   INSTALLED_APPS += ("debug_toolbar.apps.DebugToolbarConfig",)
   
