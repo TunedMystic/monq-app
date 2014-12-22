@@ -136,7 +136,7 @@ class UserSnippetsView(LoginRequiredMixin, ListView):
   """
   #model = Snippet
   template_name = "userextension/usersnippets.html"
-  paginate_by = 4
+  paginate_by = 6
   page_kwarg = "pg"
   login_url = "/login/"
   
@@ -154,7 +154,7 @@ class UserSnippetLikesView(LoginRequiredMixin, ListView):
   """
   #model = Snippet
   template_name = "userextension/userlikedsnippets.html"
-  paginate_by = 4
+  paginate_by = 6
   page_kwarg = "pg"
   login_url = "/login/"
   

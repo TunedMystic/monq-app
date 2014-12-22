@@ -1,0 +1,39 @@
+
+.public-dashboard li div.well {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-bottom: 30px;
+}
+
+.public-dashboard li div.well h2{
+  margin: 14px 0px;
+}
+
+.dashboard-top .img-thumbnail {
+  background-color: #222;
+}
+
+ul#user-profile-block li {
+  vertical-align: text-bottom;
+}
+
+.dashboard-top-list li {
+  text-align: left;
+}
+
+.dashboard-top-list h2 {
+  margin: 0px inherit;
+}
+
+.snippet-list-heading h3 {
+  margin: 0px 0px;
+}
+
+.user-data-block {
+  
+}
+
+.recent-snippet-block {
+  margin-top: 30px;
+}
+

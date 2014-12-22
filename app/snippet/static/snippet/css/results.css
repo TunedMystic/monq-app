@@ -37,6 +37,7 @@
 .results-object-preview pre{
   height: 160px;
   overflow: hidden;
+  word-wrap: normal;
 }
 
 .paginator-block {
@@ -77,3 +78,38 @@
     margin-top: 10px;
   }
 }
+
+/* User Detail Snippets Page */
+.user-detail-title li {
+  vertical-align: middle;
+}
+
+.user-detail-title li img {
+  background-color: #222;
+  padding: 3px;
+}
+
+.user-detail-title li h2{
+  margin: 0px;
+}
+
+/* User Snippet Likes Page */
+.private-snippet-block {
+  height: 160px;
+  background-color: #93B2BE;
+  border-radius: 4px;
+  margin: 0 0 10px;
+  padding-top: 16px;
+  color: #23232C;
+}
+
+.private-snippet-block {
+  font-size: 60px;
+}
+
+.private-snippet-block h3 {
+  margin: 0px 0px;
+  margin-top: -4px;
+}
+
+

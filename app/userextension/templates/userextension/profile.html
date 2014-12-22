@@ -1,46 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>User Profile</title>
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
+{% extends 'snippet/_base.html' %}
+{% load staticfiles %}
 
-<body id="home">
-  
-  <img src="https://sigil.cupcake.io/{{ object.username }}?inverted=1&w=72" width="72" height="72">
-  <h2>{{ object.username }}</h2>
-  
-  <p>Active via {{ object.userprofile.getProvider }}</p>
-  
-  <div>
-    <h3>Recent Snippets:</h3>
-    {% if recentSnippets %}
-      <ul>
-        {% for rSnip in recentSnippets %}
-        <li style="border:1px solid black;">
-          <p>{{ rSnip.title }} - on {{ rSnip.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</p>
-          <p>Hits: {{ rSnip.snippetextras.hits }}</p>
-          <p>Language: {{ rSnip.language }}</p>
-        </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <h2>No recent snippets.</h2>
-    {% endif %}
-  </div>
-  
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript">
-    
-    $(document).ready(function() {
-      //do something here.
-    });
-    
-  </script>
-</body>
-</html>
+
+{% block stylestop %}
+<link rel="stylesheet" href="{% static 'userextension/css/profile.css' %}">
+{% endblock %}
+
+
+{% block main %}
+<!-- .row-->
+<div class="row">
+	
+	<div class="col-md-3 col-sm-2"></div>
+	
+	<div class="col-md-6 col-sm-8 col-xs-12">
+		<ul class="list-unstyled public-dashboard">
+			
+			<li>
+				<div class="well text-center">
+					<h2 class="text-muted">Public Profile</h2>
+				</div>
+			</li>
+			
+			<!-- User data block -->
+			<li class="user-data-block">
+				<!-- User profile block -->
+					<ul id="user-profile-block" class="list-unstyled list-inline dashboard-top text-center">
+						<li><img class="img-thumbnail" src="https://sigil.cupcake.io/{{ object.username }}?inverted=1&w=120" width="120" height="120"></li>
+						<li class="dashboard-list">
+							<ul class="list-unstyled dashboard-top-list">
+								<li><h2><strong>{{ object.username }}</strong></h2></li>
+								{% if object.userprofile.websiteUrl %}
+									<li><h5><a id="user-website" href="{{ object.userprofile.websiteUrl }}">{{ object.userprofile.websiteUrl }}</a></h5></li>
+								{% endif %}
+								<li><h5 class="text-muted"><small>joined on</small> {{ user.date_joined|date:"d F Y" }}</h5></li>
+								<li><h5 class="text"><small>number of Snippets</small> <strong>{{ object.snippet_set.count }}</strong></h5></li>
+							</ul>
+						</li>
+					</ul> <!-- /User profile block -->
+			</li>
+			
+			<!-- Recent Snippets block -->
+			<li class="recent-snippet-block">
+				<div class="panel panel-default">
+					<div class="panel-heading snippet-list-heading"><h3>Recent Snippets:</h3></div>
+					<div class="panel-body">
+						<!-- Table -->
+						<table class="table table-hover table-responsive">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Title</th>
+									<th>Language</th>
+									<th>Date</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for snippet in object.snippet_set.all reversed %}
+								  {% ifequal snippet.visibility "public" %}
+									<tr>
+										<td><span data-toggle="tooltip" data-placement="left" title="Public Snippet"><i class="fa fa-user fa-2"></i></span></td>
+										<td><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}"><strong>{{ snippet.title }}</strong></a></td>
+										<td>{{ snippet.language }}</td>
+										<td>{{ snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</td>
+									</tr>
+							    {% endifequal %}
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</li>
+			<!-- /Recent Snippets block -->
+			
+			
+		</ul>
+	</div>
+	
+	<div class="col-md-3 col-sm-2"></div>
+	
+</div> <!-- /.row-->
+{% endblock %}
+
+
+{% block scriptsbottom %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('[data-toggle="tooltip"]').tooltip()
+		});
+	</script>
+{% endblock %}
+

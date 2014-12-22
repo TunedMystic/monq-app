@@ -1,6 +1,4 @@
 ~ Pages to work on:
-  * Public User profile
-  * Login
   * 404
   * 500
 ~ Plan 'About', 'FAQ', 'Contact', and other content pages.

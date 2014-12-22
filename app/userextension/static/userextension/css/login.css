@@ -1,0 +1,42 @@
+
+.login-list {
+  margin-bottom: 0px;
+}
+
+.login-list li {
+  padding: 0px 30px;
+}
+
+.login-icon {
+  text-align: center;
+}
+
+.login-icon i {
+  font-size: 90px;
+}
+
+.login-icon.facebook i {
+  color: #3B5998;
+}
+.login-icon.twitter i {
+  color: #4099FF;
+}
+.login-icon.google i {
+  color: #dd4b39;
+}
+
+@media(max-width:767px){
+  .login-icon {
+    margin-top: 10px;
+  }
+}
+@media(min-width:768px){
+  .login-icon.facebook {
+    float: right;
+  }
+  .login-icon.twitter {
+    float: left;
+  }
+}
+@media(min-width:992px){}
+@media(min-width:1200px){}

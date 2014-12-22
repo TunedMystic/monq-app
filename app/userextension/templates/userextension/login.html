@@ -1,53 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Login</title>
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
+{% extends 'snippet/_base.html' %}
+{% load staticfiles %}
 
-<body id="home">
-  
- {% block main %}
-   <div>
-   <h1>Login Here</h1>
 
-   <p>
-     <ul>
-     {% if user and not user.is_anonymous %}
-       <li>
-         <a>Hello {{ user.username }}!</a>
-       </li>
-       <li>
-         <a href="{% url 'auth_logout' %}">Logout</a>
-       </li>
-     {% else %}
-       <li>
-         <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
-       </li>
-       <li>
-         <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
-       </li>
-       <li>
-         <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a>
-       </li>
-     {% endif %}
-     </ul>
-   </p>
-   </div>
-  {% endblock %}
-  
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript">
-    
-    $(document).ready(function() {
-      //do something here.
-    });
-    
-  </script>
-</body>
-</html>
+{% block stylestop %}
+  <link rel="stylesheet" href="{% static 'userextension/css/login.css' %}">
+{% endblock %}
+
+
+{% block main %}
+
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<h1><span><strong>Social Login:</strong></span><br><small>Authenticate yourself with social networks!</small></h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+	<div class="well">
+		
+		
+		<ul class="list-inline list-unstyled login-list">
+			<div class="row">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+				<li class="login-icon facebook">
+					<a href="{% url 'social:begin' 'facebook' %}"><span><i class="fa fa-facebook-square wobble-vertical"></i></span></a>
+					<p><a href="{% url 'social:begin' 'facebook' %}"><strong>Login with Facebook</strong></a></p>
+				</li>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+				<li class="login-icon google">
+					<a href="{% url 'social:begin' 'google-oauth2' %}"><span><i class="fa fa-google-plus-square wobble-vertical"></i></span></a>
+					<p><a href="{% url 'social:begin' 'google-oauth2' %}"><strong>Login with Google</strong></a></p>
+				</li>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+				<li class="login-icon twitter">
+					<a href="{% url 'social:begin' 'twitter' %}"><span><i class="fa fa-twitter-square wobble-vertical"></i></span></a>
+					<p><a href="{% url 'social:begin' 'twitter' %}"><strong>Login with Twitter</strong></a></p>
+				</li>
+				</div>
+			</div> <!-- /.row -->
+		</ul>
+		
+		
+	</div> <!-- /.well -->
+	</div>
+</div>
+{% endblock %}
+
+
+{% block scriptsbottom %}
+{% endblock %}
+

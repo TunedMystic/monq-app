@@ -1,49 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>User Snippets</title>
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-</head>
+{% extends 'snippet/_base.html' %}
+{% load staticfiles %}
 
-<body id="home">
-  <h2>{{ user.username }}'s Snippets:</h2>
+
+{% block stylestop %}
+  <link rel="stylesheet" href="{% static 'snippet/css/results.css' %}">
+	<link rel="stylesheet" href="{% static 'nil/css/arta.css' %}">
+{% endblock %}
+
+
+{% block main %}
   
-  {% if object_list %}
-    {% for snippet in object_list %}
-      <div style="border: 1px solid black;">
-        <a href="{% url 'snippet:detailSnippet' snippet.url_code %}"><p>{{ snippet.title }}</p></a>
-      </div>
-      <br>
-    {% endfor %}
-  {% else %}
-    <h2>No Snippets made yet.</h2>
-  {% endif %}
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<ul class="list-unstyled list-inline user-detail-title">
+				<li><img class="img-thumbnail" src="https://sigil.cupcake.io/{{ user.username }}?inverted=1&w=60" width="60" height="60"></li>
+				<li>
+					<h2><strong>Snippets I made:</strong></h2>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="ccol-md-1"></div>
+		
+		<div class="col-md-12">
+			<ul class="list-unstyled results-list">
+				{% if object_list %}
+					{% for snippet in object_list %}
+					<li class="col-md-4 results-object-outer">
+						
+						
+						<div class="results-object">
+							{% if snippet.author %}
+							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.title }}</a></span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippet.author.username %}">{{ snippet.author.username }}</a></span></p>
+							{% else %}
+							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.title }}</a></span> by <span class="author">Guest</span></p>
+							{% endif %}
+							<div class="results-object-preview">
+								<pre class="{{ snippet.language }}">
+{{ snippet.preview|escape }}
+								</pre>
+							</div> <!-- /.results-object-preview -->
+							<p class="rbottom"><small class="text-muted">{{ snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</small></p>
+						</div>
+						
+						
+					</li>
+					{% endfor %}
+				{% else %}
+				<li class="text-center"><h2 class="text-muted">No Snippets made yet...</h2></li>
+				{% endif %}
+			</ul>
+		</div>
+		
+		<div class="ccol-md-1"></div>
+	</div>
   
-  {% if is_paginated %}
-    {% if page_obj.has_previous %}
-      <a href="{% url 'userext:usersnippets' pg=page_obj.previous_page_number %}">Previous</a>
-    {% endif %}
-    <span>
-      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-    </span>
-    {% if page_obj.has_next %}
-      <a href="{% url 'userext:usersnippets' pg=page_obj.next_page_number %}">Next</a>
-    {% endif %}
-  {% endif %}
+	
+	<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12 text-center paginator-block">
+			{% if is_paginated %}
+			{% if page_obj.has_previous %}
+				<a class="label label-default previous" href="{% url 'userext:usersnippets' pg=page_obj.previous_page_number %}">Prev</a>
+			{% endif %}
+			<span>
+				Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong>
+			</span>
+			{% if page_obj.has_next %}
+				<a class="label label-default next" href="{% url 'userext:usersnippets' pg=page_obj.next_page_number %}">Next</a>
+			{% endif %}
+		{% endif %}
+	</div>
+</div>
+
   
-  
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript">
-    
-    $(document).ready(function() {
-      //do something here.
-    });
-    
-  </script>
-</body>
-</html>
+{% endblock %}
+
+
+
+{% block scriptsbottom %}
+<script type="text/javascript" src="{% static 'nil/js/highlight.min.js' %}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$('div pre').each(function(i, block) {
+			hljs.highlightBlock(block);
+		});
+		
+	});
+</script>
+{% endblock %}
