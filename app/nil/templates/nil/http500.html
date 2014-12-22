@@ -1,5 +1,48 @@
-<br><br>
-<p>500: Internal Server Error</p>
-<br>
-<h1>Whoops! Something went wrong...Sorry!</h1>
-<p>Click<a href="{% url 'snippet:index' %}"> here </a>teleport to civilization.</p>
+{% extends 'snippet/_base.html' %}
+
+
+{% block stylestop %}
+<style>
+  .error500 {
+    padding-bottom: 120px;
+    padding-top: 50px;
+  }
+  .error500 i {
+    font-size: 30px;
+    color: #D1463A;
+  }
+</style>
+{% endblock %}
+
+
+{% block main %}
+
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="error500">
+      <h4 class="text-danger">500: Internal Server Error</h4>
+      <br>
+        
+      <div class="well">
+        <div class="row">
+          
+          <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+            <span><i class="fa fa-exclamation-triangle"></i></span>
+          </div>
+          
+          <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+            <span><i class="fa fa-exclamation-triangle"></i></span>
+          </div>
+          
+        </div>
+        <h1>Whoops! Something went wrong...Sorry!</h1>
+        <h3><small>Click<a href="{% url 'snippet:index' %}"> here </a>to teleport to civilization.</small></h3>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
