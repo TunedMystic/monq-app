@@ -33,9 +33,9 @@
 						
 						<div class="results-object">
 							{% if snippetlike.snippet.author %}
-							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippetlike.snippet.url_code %}">{{ snippetlike.snippet.title }}</a></span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippetlike.author.username %}">{{ snippetlike.author.username }}</a></span></p>
+							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippetlike.snippet.url_code %}">{{ snippetlike.snippet.shortTitle }}</a></span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippetlike.author.username %}">{{ snippetlike.author.username }}</a></span></p>
 							{% else %}
-							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippetlike.snippet.url_code %}">{{ snippetlike.snippet.title }}</a></span> by <span class="author">Guest</span></p>
+							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippetlike.snippet.url_code %}">{{ snippetlike.snippet.shortTitle }}</a></span> by <span class="author">Guest</span></p>
 							{% endif %}
 							<div class="results-object-preview">
 								
@@ -52,8 +52,15 @@
 								
 								
 							</div> <!-- /.results-object-preview -->
-							<p class="rbottom"><small class="text-muted">{{ snippetlike.snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</small></p>
-						</div>
+							<form action="{% url 'snippet:searchSnippet' %}" method="POST">
+              {% csrf_token %}
+						  <p class="rbottom">
+                <small class="text-muted">{{ snippetlike.snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</small>
+                <a class="language-link label label-primary pull-right">{{ snippetlike.snippet.language }}</a>
+                <input type="hidden" name="searchQ" value="{{ snippetlike.snippet.language }}">
+              </p>
+            </form>
+				 </div> <!-- /.results-object -->
 						
 						
 					</li>

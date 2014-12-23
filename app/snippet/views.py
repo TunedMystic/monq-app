@@ -17,7 +17,7 @@ def getFilterTerms(query):
   # Seach by title.
   q.add(Q(title__icontains=query), Q.OR)
   # Search by language.
-  q.add(Q(language=query), Q.OR)
+  q.add(Q(language=query.lower()), Q.OR)
   # Search by tags.
   q.add(Q(tags__name__in=query.split(" ")), Q.OR)
   return q

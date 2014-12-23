@@ -175,6 +175,7 @@
 	<input id="page-path" type="hidden" data-path="{{ path }}">
 	<script>
 		$(document).ready(function() {
+      var thisTitle = "Check out this Snippet! - " + "{{ object.title }}"
 			var thisPage = $("#page-path").data("path");
 		  var shareUrls = {
 			"facebook"  : "https://www.facebook.com/sharer/sharer.php?u=", 
@@ -189,6 +190,11 @@
 			$("#m_fb_image").attr("content", document.location.origin + "/static/nil/img/monqBanner.png");
 			$("#m_tw_image").attr("content", document.location.origin + "/static/nil/img/monqBanner.png");
       $("#m_gl_image").attr("content", document.location.origin + "/static/nil/img/monqBanner.png");
+      
+      $("#m_title").attr("content", thisTitle);
+      $("#m_gp_title").attr("content", thisTitle);
+      $("#m_tw_title").attr("content", thisTitle);
+      $("#m_fb_title").attr("content", thisTitle);
 			
 			// Set up social icons.
 			$(".share-twitter a").attr("href", shareUrls["twitter"] );

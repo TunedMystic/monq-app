@@ -40,6 +40,11 @@ class UserProfile(models.Model):
     ]
   }
   """
+  @property
+  def shortUrl(self):
+    if len(self.websiteUrl) > 24:
+      return self.websiteUrl[:22] + "..."
+    return self.websiteUrl
   
   def addLoginDetails(self, date, ipAddress):
     """

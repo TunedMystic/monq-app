@@ -112,4 +112,6 @@
   margin-top: -4px;
 }
 
-
+.language-link {
+  cursor: pointer;
+}

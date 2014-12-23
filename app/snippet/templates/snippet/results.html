@@ -28,7 +28,7 @@
 					
 					<div class="results-object">
 						{% if snippet.author %}
-						<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.title }}</a></span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippet.author.username %}">{{ snippet.author }}</a></span></p>
+						<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.shortTitle }}</a></span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippet.author.username %}">{{ snippet.author }}</a></span></p>
 						{% else %}
 						<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.title }}</a></span> by <span class="author">Guest</span></p>
 						{% endif %}

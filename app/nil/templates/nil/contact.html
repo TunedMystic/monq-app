@@ -1,0 +1,47 @@
+{% extends 'snippet/_base.html' %}
+{% load staticfiles %}
+
+
+{% block stylestop %}
+  <link rel="stylesheet" href="{% static 'userextension/css/login.css' %}">
+  <style>
+    .contact-details {
+      margin-bottom: 50px;
+    }
+  </style>
+{% endblock %}
+
+
+{% block main %}
+
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12 login-heading">
+		<h1><span><strong>Contact</strong></span><br><small>Want to reach out?</small></h1>
+	</div>
+</div>
+
+<div class="row contact-details">
+	<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+	<div class="well">
+		
+		
+		<ul class="list-inline list-unstyled login-list">
+			<div class="row text-center">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+          <h3>Drop me a line at</h3>
+          <h2><a target="_blank" href="https://twitter.com/sandcoder">@sandcoder</a>,</h2>
+          <h3>and I'll be in touch!</h3>
+				</div>
+			</div> <!-- /.row -->
+		</ul>
+		
+		
+	</div> <!-- /.well -->
+	</div>
+</div>
+{% endblock %}
+
+
+{% block scriptsbottom %}
+{% endblock %}
+

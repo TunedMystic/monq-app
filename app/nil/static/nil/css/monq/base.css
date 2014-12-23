@@ -1,5 +1,20 @@
+.affix {
+  position: fixed;
+  top: 0;
+  height: 50px;
+  z-index: 99;
+  width: 100%;
+}
+
 .monq-verylight {
-  color: #D5DDED !important;
+  color: #E6EEFD !important
+}
+a.monq-verylight:hover {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+a.monq-verylight h4:hover {
+  color: #ffffff !important;
 }
 #page-header li .monq-light :hover {
   color: #DEF5FA !important;
@@ -18,7 +33,11 @@
   color: #515967 !important;
 }
 .monq-light {
-  color: #BEC6D5 !important;
+  color: #D6DDEC !important
+}
+
+a.monq-light:hover {
+  color: #ffffff !important;
 }
 #page-header {
   background-color: #36274b;

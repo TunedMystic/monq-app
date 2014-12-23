@@ -105,7 +105,9 @@ class UserDashboardView(LoginRequiredMixin, DetailView, ProcessFormView):
     # Get the User login details.
     context["loginDetails"] = usr.userprofile.getLoginDetailsList()
     # Build the full url of the User's public profile (This is used if the User has no website).
-    context["profileUrl"] = self.request.build_absolute_uri(reverse("userext:profile", kwargs={"usrname": self.object.username}))
+    v = self.request.build_absolute_uri(reverse("userext:profile", kwargs={"usrname": self.object.username}))
+    if len(v) > 24: v = v[:20] + "..."
+    context["profileUrl"] = v
     return context
   
   def post(self, request, *args, **kwargs):

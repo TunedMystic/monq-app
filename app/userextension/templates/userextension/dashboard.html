@@ -28,7 +28,7 @@
 								{% if not user.userprofile.websiteUrl %}
 									<li><h5><a id="user-website" href="{{ profileUrl }}">{{ profileUrl }}</a></h5></li>
 								{% else %}
-									<li><h5><a id="user-website" href="{{ user.userprofile.websiteUrl }}">{{ user.userprofile.websiteUrl }}</a></h5></li>
+									<li><h5><a id="user-website" href="{{ user.userprofile.websiteUrl }}">{{ user.userprofile.shortUrl }}</a></h5></li>
 								{% endif %}
 								<li><h5 class="text-muted"><small>joined on</small> {{ user.date_joined|date:"d F Y" }}</h5></li>
 								<li><h5 class="text-muted"><small>last login</small> {{ user.last_login|date:"d F Y" }}</h5></li>
@@ -288,7 +288,9 @@
 						// Change the user's url (top of page) to the url in the form.
 						if($("#websiteUrl").val() != "") {
 							$("#user-website").attr("href", $("#websiteUrl").val());
-						  $("#user-website").text($("#websiteUrl").val());
+              var newurl = $("#websiteUrl").val();
+              if(newurl.length > 24) newurl = newurl.substring(0, 20) + "...";
+						  $("#user-website").text(newurl);
 						}
 					},
 					error: function(data, status, jqXHR) {

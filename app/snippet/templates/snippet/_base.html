@@ -7,23 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <!-- Content Meta Tags -->
-    <meta id="m_title" name="title" content="Monq - Code Snippets with Green Tea!">
+    <meta id="m_title" name="title" content="">
     <meta id="m_description" name="description" content="Monq is a small and simple web app to make and share code/text snippets online. Code snippets are the future. Easy as Pie!">
     
     <!-- Schema.org markup for Google_Plus -->
-    <meta itemprop="name" content="Monq - Code Snippets with Green Tea!">
+    <meta id="m_gp_title" itemprop="name" content="">
     <meta itemprop="description" content="Monq is a small and simple web app to make and share code/text snippets online. Code snippets are the future. Easy as Pie!">
     <meta id="m_gl_image" itemprop="image" content="">
     
     <!-- Twitter Card Meta tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@sandcoder">
-    <meta name="twitter:title" content="Monq - Code Snippets with green tea!">
+    <meta id="m_tw_title" name="twitter:title" content="">
     <meta name="twitter:description" content="Monq is a small and simple web app to make and share code/text snippets online. You can make code snippets, share them, and save them for later. Code snippets are the future. Easy as Pie!">
     <meta id="m_tw_image" name="twitter:image:src" content="">
 
     <!-- Facebook Graph Meta tags -->
-    <meta id="m_fb_title" property="og:title" content="Monq - Code Snippets with green tea!" />
+    <meta id="m_fb_title" property="og:title" content="" />
     <meta id="m_fb_type" property="og:type" content="website" />
     <meta id="m_fb_url" property="og:url" content="" />
     <meta id="m_fb_image" property="og:image" content="" />
@@ -79,6 +79,7 @@
             <li><h3><strong><a class="monq-light" href="{% url 'snippet:index' %}">Home</a></strong></h3></li>
             <li><h3><strong><a class="monq-light" href="{% url 'nil:about' %}">About</a></strong></h3></li>
             <li><h3><strong><a class="monq-light" href="{% url 'nil:about' %}#faq">FAQ</a></strong></h3></li>
+            <li><h3><strong><a class="monq-light" href="{% url 'nil:contact' %}">Contact</a></strong></h3></li>
           </ul>
         </div> <!--/.navbar-collapse -->
         
@@ -178,7 +179,7 @@
               <li><a class="monq-verylight" href="{% url 'snippet:index' %}"><h4><strong>Home</strong></h4></a></li>
               <li><a class="monq-verylight" href="{% url 'nil:about' %}"><h4><strong>About</strong></h4></a></li>
               <li><a class="monq-verylight" href="{% url 'nil:about' %}#faq"><h4><strong>FAQ</strong></h4></a></li>
-              <li><a class="monq-verylight" href="#"><h4><strong>Contact</strong></h4></a></li>
+              <li><a class="monq-verylight" href="{% url 'nil:contact' %}"><h4><strong>Contact</strong></h4></a></li>
             </ul>
           </div>
         </div> <!-- /row -->
@@ -193,10 +194,9 @@
         </div> <!-- /row -->
         
         <ul class="social-icons list-inline text-center">
-          <li><a href="#" class="social-icon facebook wobble-to-top-right"></a></li>
-          <li><a href="#" class="social-icon twitter buzz-out"></a></li>
-          <li><a href="#" class="social-icon googleplus wobble-vertical"></a></li>
-          <li><a href="#" class="social-icon github wobble-to-bottom-right"></a></li>
+          <li><a target="_blank" href="https://twitter.com/sandcoder" class="social-icon twitter buzz-out"></a></li>
+          <li><a target="_blank" href="http://gplus.to/sandcoder" class="social-icon googleplus wobble-vertical"></a></li>
+          <li><a target="_blank" href="https://github.com/tunedmystic" class="social-icon github wobble-to-bottom-right"></a></li>
         </ul>
       </div> <!-- /container -->
       

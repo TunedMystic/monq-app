@@ -126,3 +126,13 @@ $(document).ready(function() {
   });
 });
 
+
+// Submit the hidden form when the user clicks a 'language-link' label.
+// This form will submit the contents of the 'language-link' for searching.
+$(document).ready(function() {
+  $(".language-link").click(function(e) {
+    e.preventDefault();
+    $(this).closest("form").submit();
+  });
+});
+

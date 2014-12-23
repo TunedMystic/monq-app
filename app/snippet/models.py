@@ -38,6 +38,12 @@ class Snippet(models.Model):
   def preview(self):
     return "%s" %(self.content[:150])
   
+  @property
+  def shortTitle(self):
+    if len(self.title) > 24:
+      return self.title[:22] + "..."
+    return self.title
+  
   @staticmethod
   def rawSize(x):
     return sys.getsizeof(x)

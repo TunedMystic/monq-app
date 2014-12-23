@@ -33,17 +33,24 @@
 						
 						<div class="results-object">
 							{% if snippet.author %}
-							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.title }}</a></span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippet.author.username %}">{{ snippet.author.username }}</a></span></p>
+							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.shortTitle }}</a></span> by <span class="author"><a href="{% url 'userext:profile' usrname=snippet.author.username %}">{{ snippet.author.username }}</a></span></p>
 							{% else %}
-							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.title }}</a></span> by <span class="author">Guest</span></p>
+							<p class="rtop"><span class="title"><a href="{% url 'snippet:detailSnippet' urlcode=snippet.url_code %}">{{ snippet.shortTitle }}</a></span> by <span class="author">Guest</span></p>
 							{% endif %}
 							<div class="results-object-preview">
 								<pre class="{{ snippet.language }}">
 {{ snippet.preview|escape }}
 								</pre>
 							</div> <!-- /.results-object-preview -->
-							<p class="rbottom"><small class="text-muted">{{ snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</small></p>
-						</div>
+							<form action="{% url 'snippet:searchSnippet' %}" method="POST">
+              {% csrf_token %}
+						  <p class="rbottom">
+                <small class="text-muted">{{ snippet.date_added_raw|date:"SHORT_DATETIME_FORMAT" }}</small>
+                <a class="language-link label label-primary pull-right">{{ snippet.language }}</a>
+                <input type="hidden" name="searchQ" value="{{ snippet.language }}">
+              </p>
+            </form>
+				 </div> <!-- /.results-object -->
 						
 						
 					</li>
