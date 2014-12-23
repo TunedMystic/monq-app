@@ -5,6 +5,7 @@ django-braces==1.4.0
 django-debug-toolbar==1.2.2
 django-ipware==0.1.0
 django-taggit==0.12.2
+gunicorn==19.1.1
 jsonfield==1.0.0
 oauthlib==0.7.2
 python-dateutil==2.3
