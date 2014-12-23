@@ -38,7 +38,7 @@ def randomDate():
   This function will return a random datetime between two datetime objects.
   """
   start = arrow.get(datetime.datetime(2014, 7, 1, 12, 0, 0))
-  end = arrow.get(datetime.datetime(2014, 12, 30, 12, 0, 0))
+  end = arrow.get(datetime.datetime(2014, 12, 17, 12, 0, 0))
   delta = end - start
   int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
   random_second = random.randrange(int_delta)
