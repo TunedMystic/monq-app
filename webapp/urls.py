@@ -12,5 +12,9 @@ urlpatterns = patterns('',
   
 )
 
+urlpatterns += patterns('',
+    (r'^static/(?P.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+)
+
 handler404 = "nil.views.error404"
 handler500 = "nil.views.error500"
