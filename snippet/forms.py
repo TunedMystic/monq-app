@@ -23,7 +23,7 @@ class SnippetForm(forms.ModelForm):
     model = Snippet
     #fields = ["title", "content", "language", "visibility", "password", "tags" ]
     exclude = ["author", "date_added_raw", "url_code"]
-   
+    
   def clean_title(self, *args, **kwargs):
     """
     Checks is the title is an empty string.
